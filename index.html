@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="stylesheet" href="index.css">
+    </head>
+    <body>
+        <div class="skinomatic">
+            <header class="skinomatic__header">
+                <h1>
+                    <img id="skinomatic.logo" src="/skinomatic.png">
+                    <span>MediaWiki Skinomatic</span>
+                </h1>
+                <p>Make yourself a MediaWiki skin!</p>
+                <div class="skinomatic__buttons">
+                    <button class="skinomatic__buttons__button" id="skinomatic.reset">Reset</button>
+                    <button class="skinomatic__buttons__button" id="skinomatic.build">Build Skin!</button>
+                </div>
+            </header>
+            <div class="skinomatic__builder">
+                <section class="skinomatic__builder__section">
+                    <h2>name</h2>
+                    <input type="text" value="SkinomaticSkin" id="skinomatic.title">
+                </section>
+                <section class="skinomatic__builder__section">
+                    <h2>CSS</h2>
+                    <textarea class="skinomatic__textarea"  id="skinomatic.css"
+                        placeholder="Accepts CSS only">
+                    </textarea>
+                    <p>Include any default style packs?</p>
+                    <div>
+                        <input class="skin__features" checked type="checkbox" value="content" name="skin.features.content">
+                        <label for="skin.features.content">content</label>
+                        <input class="skin__features" checked type="checkbox" value="elements" name="skin.features.elements">
+                        <label for="skin.features.elements">elements</label>
+                        <input class="skin__features"checked type="checkbox" value="interface" name="skin.features.interface">
+                        <label for="skin.features.interface">interface</label>
+                        <input class="skin__features" checked type="checkbox" value="logo" name="skin.features.logo">
+                        <label for="skin.features.logo">logo</label>
+                    </div>
+                </section>
+                <section class="skinomatic__builder__section">
+                    <h2>Template</h2>
+                    <textarea class="skinomatic__textarea" id="skinomatic.mustache"
+                        placeholder="Accepts mustache template">
+                    </textarea>
+                </section>
+            </div>
+            <div class="skinomatic__preview">
+
+                <section class="skinomatic__builder__section">
+                    <h2>Content</h2>
+                    <select id="skinomatic.content">
+                        <option value="1">Placeholder</option>
+                        <option value="2">Ipsum Lorem</option>
+                        <option value="3">Akira Kurosawa</option>
+                        <option value="4">Salvador Dalí</option>
+                    </select>
+                    <input type="checkbox" id="skinomatic.loggedin" value="1" /> Logged in?
+                </section>
+                <h2>Preview</h2>
+                <iframe src="loading.html"
+                    id="skinomatic__preview__iframe" class="skinomatic__preview__iframe"></iframe>
+            </div>
+            <footer class="skinomatic__footer">
+            </footer>
+            <script type="text/javascript" src="index.js"></script>
+        </div>
+    </body>
+</html>
