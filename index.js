@@ -224,9 +224,9 @@ function init() {
     const contentSelector = document.getElementById(CONTENT_SOURCE_ID);
     const loggedin = document.getElementById('skinomatic.loggedin');
 
-    setmustache(defaultTemplate);
+    setmustache(localStorage.getItem(MUSTACHE_ID) || defaultTemplate);
     setcss(
-        defaultCSS
+        ( localStorage.getItem(CSS_ID) || defaultCSS )
             .replace(/\url\(\/static\/images\//g, 'url(https://en.wikipedia.org/static/images/')
             .replace(/\url\(\/w\//g, 'url(https://en.wikipedia.org/w/')
     );
