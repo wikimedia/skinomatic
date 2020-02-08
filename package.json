@@ -10,6 +10,7 @@
   },
   "devDependencies": {},
   "scripts": {
+    "build": "parcel build index.html",
     "start": "parcel index.html"
   },
   "author": ""
