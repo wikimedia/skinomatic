@@ -18,7 +18,7 @@ function addi18n(name, rootfolder) {
     };
     const qqq = {
         [`skinname-${skinKey}`]: '{{optional}}',
-        [`${name}-desc`]: `{{desc|what=skin|name=${name}|url=https://www.mediawiki.org/wiki/Skin:${name}}}`
+        [`${skinKey}-desc`]: `{{desc|what=skin|name=${name}|url=https://www.mediawiki.org/wiki/Skin:${name}}}`
     }
     i18nfolder.file('en.json', stringifyjson(en));
     i18nfolder.file('qqq.json', stringifyjson(qqq));
