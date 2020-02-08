@@ -5,6 +5,10 @@ import fs from 'fs';
 const ScaffoldingTemplate = fs.readFileSync(`${__dirname}/../scaffolding/ScaffoldingTemplate.php.txt`).toString();
 const SkinScaffolding = fs.readFileSync(`${__dirname}/../scaffolding/SkinScaffolding.php.txt`).toString();
 
+function stringifyjson(json) {
+    return JSON.stringify(json, null, 2);
+}
+
 function addi18n(name, rootfolder) {
     const skinKey = name.toLowerCase();
     const i18nfolder = rootfolder.folder('i18n');
@@ -16,8 +20,8 @@ function addi18n(name, rootfolder) {
         [`skinname-${skinKey}`]: '{{optional}}',
         [`${name}-desc`]: `{{desc|what=skin|name=${name}|url=https://www.mediawiki.org/wiki/Skin:${name}}}`
     }
-    i18nfolder.file('en.json', JSON.stringify(en));
-    i18nfolder.file('qqq.json', JSON.stringify(qqq));
+    i18nfolder.file('en.json', stringifyjson(en));
+    i18nfolder.file('qqq.json', stringifyjson(qqq));
 }
 
 function addphp(name, includesfolder) {
@@ -41,7 +45,7 @@ function addphp(name, includesfolder) {
 function skinjson(name, features) {
     const skinKey = name.toLowerCase();
 
-    return JSON.stringify(
+    return stringifyjson(
         {
             name,
             namemsg: `skinname-${skinKey}`,
