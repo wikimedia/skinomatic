@@ -149,14 +149,12 @@ function preview() {
             'html-logo-attributes': htmllogoattributes,
     
             // site specific
-            'html-hook-vector-before-footer': placeholder( 'output of VectorBeforeFooter hook (deprecated 1.35)', 20 ),
             'array-footer-rows': FOOTER_ROWS,
             'html-sitenotice': placeholder( 'a site notice or central notice banner may go here', 70 ),
             'html-printfooter': `Retrieved from ‘<a dir="ltr" href="#">#?title=this&oldid=blah</a>’`,
             'html-catlinks': placeholder( 'Category links component from mediawiki core', 50 ),
 
             // extension dependent..
-            'html-hook-vector-before-footer': placeholder( 'VectorBeforeFooter hook output', 100 ),
             'html-dataAfterContent': placeholder( 'Extensions can add here e.g. Related Articles.', 100 ),
             'html-indicators': HTML_INDICATORS,
             'html-subtitle': placeholder( 'Extensions can configure subtitle', 20 )
