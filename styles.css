@@ -129,7 +129,7 @@
 	  display: none;
 	}
 	ul {
-	  list-style-image: url(/w/skins/Vector/resources/skins.vector.styles/images/bullet-icon.svg?872f1);
+	  list-style-image: url(images/bullet-icon.svg);
 	}
 	pre,
 	.mw-code {
@@ -167,8 +167,7 @@
 	/* Icon for registered user names & anonymous message */
 	#pt-anonuserpage,
 	#pt-userpage a {
-	  background-image: url(/w/skins/Vector/resources/skins.vector.styles/images/user-avatar.png?59494);
-	  background-image: linear-gradient(transparent, transparent), url(/w/skins/Vector/resources/skins.vector.styles/images/user-avatar.svg?b7f58);
+	  background-image: linear-gradient(transparent, transparent), url(images/user-avatar.svg);
 	  background-position: left 0.33333333em;
 	  background-repeat: no-repeat;
 	  background-size: 1.16666667em 1.16666667em;
@@ -299,8 +298,7 @@
 	  z-index: 1;
 	}
 	#searchButton {
-	  background-image: url(/w/skins/Vector/resources/skins.vector.styles/images/search.png?39f97);
-	  background-image: linear-gradient(transparent, transparent), url(/w/skins/Vector/resources/skins.vector.styles/images/search.svg?4d50a);
+	  background-image: linear-gradient(transparent, transparent), url(images/search.svg);
 	  background-position: center center;
 	  background-repeat: no-repeat;
 	}
@@ -329,7 +327,6 @@
 	  padding: 0;
 	}
 	.vectorTabs li {
-	  background-image: url(/w/skins/Vector/resources/skins.vector.styles/images/tab-normal-fade.png?1cc52);
 	  background-image: linear-gradient(to top, #77c1f6 0, #e8f2f8 1px, #ffffff 100%);
 	  background-position: left bottom;
 	  background-repeat: repeat-x;
@@ -362,7 +359,6 @@
 	  color: #a55858;
 	}
 	.vectorTabs .selected {
-	  background-image: url(/w/skins/Vector/resources/skins.vector.styles/images/tab-current-fade.png?22887);
 	  background: #ffffff;
 	}
 	.vectorTabs .selected a,
@@ -397,8 +393,7 @@
 	}
 	.vectorMenu h3:after {
 	  content: '';
-	  background-image: url(/w/skins/Vector/resources/skins.vector.styles/images/arrow-down.png?42edd);
-	  background-image: linear-gradient(transparent, transparent), url(/w/skins/Vector/resources/skins.vector.styles/images/arrow-down.svg?2f021);
+	  background-image: linear-gradient(transparent, transparent), url(images/arrow-down.svg);
 	  background-position: 100% 50%;
 	  background-repeat: no-repeat;
 	  position: absolute;
@@ -473,7 +468,6 @@
 	.vectorTabs,
 	.vectorTabs a,
 	#mw-head .vectorMenu h3 {
-	  background-image: url(/w/skins/Vector/resources/skins.vector.styles/images/tab-separator.png?09d4b);
 	  background-image: linear-gradient(to bottom, rgba(167, 215, 249, 0) 0, #a7d7f9 100%);
 	  background-repeat: no-repeat;
 	  background-size: 1px 100%;
@@ -560,26 +554,22 @@
 	  height: 1.23076923em;
 	}
 	.vectorTabs #ca-unwatch.icon a:before {
-	  background-image: url(/w/skins/Vector/resources/skins.vector.styles/images/unwatch-icon.png?fccbe);
-	  background-image: linear-gradient(transparent, transparent), url(/w/skins/Vector/resources/skins.vector.styles/images/unwatch-icon.svg?725e9);
+	  background-image: linear-gradient(transparent, transparent), url(images/unwatch-icon.svg);
 	}
 	.vectorTabs #ca-watch.icon a:before {
-	  background-image: url(/w/skins/Vector/resources/skins.vector.styles/images/watch-icon.png?e1b42);
-	  background-image: linear-gradient(transparent, transparent), url(/w/skins/Vector/resources/skins.vector.styles/images/watch-icon.svg?d3c31);
+	  background-image: linear-gradient(transparent, transparent), url(images/watch-icon.svg);
 	}
 	.vectorTabs #ca-unwatch.icon a:hover:before,
 	.vectorTabs #ca-unwatch.icon a:focus:before {
-	  background-image: url(/w/skins/Vector/resources/skins.vector.styles/images/unwatch-icon-hl.png?c4723);
-	  background-image: linear-gradient(transparent, transparent), url(/w/skins/Vector/resources/skins.vector.styles/images/unwatch-icon-hl.svg?71c12);
+	  background-image: linear-gradient(transparent, transparent), url(images/unwatch-icon-hl.svg);
 	}
 	.vectorTabs #ca-watch.icon a:hover:before,
 	.vectorTabs #ca-watch.icon a:focus:before {
-	  background-image: url(/w/skins/Vector/resources/skins.vector.styles/images/watch-icon-hl.png?f4c7e);
-	  background-image: linear-gradient(transparent, transparent), url(/w/skins/Vector/resources/skins.vector.styles/images/watch-icon-hl.svg?26a8a);
+	  background-image: linear-gradient(transparent, transparent), url(images/watch-icon-hl.svg);
 	}
 	.vectorTabs #ca-unwatch.icon .loading:before,
 	.vectorTabs #ca-watch.icon .loading:before {
-	  background-image: url(/w/skins/Vector/resources/skins.vector.styles/images/watch-icon-loading.svg?34b1f);
+	  background-image: url(images/watch-icon-loading.svg);
 	  -webkit-animation: rotate 700ms infinite linear;
 	  -moz-animation: rotate 700ms infinite linear;
 	  animation: rotate 700ms infinite linear;
@@ -681,7 +671,6 @@
 	  font-size: 0.75em;
 	}
 	#mw-panel .portal .body {
-	  background-image: url(/w/skins/Vector/resources/skins.vector.styles/images/portal-separator.png?4ab04);
 	  background-image: linear-gradient(to right, transparent 0, #c8ccd1 35%, #c8ccd1 70%, transparent 100%);
 	  background-repeat: no-repeat;
 	  background-size: 100% 1px;
@@ -755,8 +744,7 @@
 	.mw-parser-output .external {
 	  background-position: center right;
 	  background-repeat: no-repeat;
-	  background-image: url(/w/skins/Vector/resources/skins.vector.styles/images/external-link-ltr-icon.png?325de);
-	  background-image: linear-gradient(transparent, transparent), url(/w/skins/Vector/resources/skins.vector.styles/images/external-link-ltr-icon.svg?b4b84);
+	  background-image: linear-gradient(transparent, transparent), url(images/external-link-ltr-icon.svg);
 	  padding-right: 13px;
 	}}@media screen and ( min-width: 982px ) {
 	/* Vector screen styles for high definition displays */

@@ -4,7 +4,7 @@
         <link rel="stylesheet" href="index.css">
     </head>
     <body>
-        <div class="skinomatic">
+        <div class="skinomatic" id="skinomatic">
             <header class="skinomatic__header">
                 <h1>
                     <img id="skinomatic.logo" src="/skinomatic.png">
@@ -26,6 +26,20 @@
                     <textarea class="skinomatic__textarea"  id="skinomatic.css"
                         placeholder="Accepts CSS only">
                     </textarea>
+                    <h2>SVGs</h2>
+                    <input type="file" name="img" id="skinomatic.images"
+                        accept=".svg" multiple>
+                    <div id="skinomatic-vue">
+                        <ul class="skinomatic__list">
+                            <li v-for="image in images" class="skinomatic__list__item">
+                                <span class="skinomatic__list__item__image">
+                                    <img v-bind:src="image.src" class="skinomatic__list__item__image__img" />
+                                </span>
+                                <span class="skinomatic__list__item__label">images/{{ image.name }}</span>
+                                <button class="skinomatic__list__item__button" v-on:click="removeImage(image.name)">🗑️</button>
+                            </li>
+                        </ul>
+                    </div>
                     <p>Include any default style packs?</p>
                     <div>
                         <input class="skin__features" checked type="checkbox" value="content" name="skin.features.content">
@@ -63,6 +77,8 @@
             </div>
             <footer class="skinomatic__footer">
             </footer>
+            <!-- development version, includes helpful console warnings -->
+            <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
             <script type="text/javascript" src="index.js"></script>
         </div>
     </body>

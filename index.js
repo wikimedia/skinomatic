@@ -2,6 +2,7 @@ import fs from 'fs';
 import mustache from 'mustache';
 import build from './src/build';
 
+const IMAGES_ID = 'skinomatic.images';
 const MUSTACHE_ID = 'skinomatic.mustache';
 const CSS_ID = 'skinomatic.css';
 const RESET_ID = 'skinomatic.reset';
@@ -24,6 +25,32 @@ const SKIN_FEATURES = {
 
 let defaultTemplate = fs.readFileSync(`${__dirname}/vector.mustache` ).toString();
 let defaultCSS = fs.readFileSync(`${__dirname}/styles.css` ).toString();
+
+const getSVGDataURI = (text) => `data:image/svg+xml;utf8,${encodeURIComponent(text)}`;
+
+const localimg = (name, text) => {
+    return {
+        name,
+        text,
+        src: getSVGDataURI(text)
+    }
+};
+
+const defaultImages = [
+    localimg('arrow-down.svg', fs.readFileSync(`${__dirname}/images/arrow-down.svg`).toString()),
+    localimg('bullet-icon.svg', fs.readFileSync(`${__dirname}/images/bullet-icon.svg`).toString()),
+    localimg('external-link-ltr-icon.svg', fs.readFileSync(`${__dirname}/images/external-link-ltr-icon.svg`).toString()),
+    localimg('search.svg', fs.readFileSync(`${__dirname}/images/search.svg`).toString()),
+    localimg('unwatch-icon-hl.svg', fs.readFileSync(`${__dirname}/images/unwatch-icon-hl.svg`).toString()),
+    localimg('unwatch-icon.svg', fs.readFileSync(`${__dirname}/images/unwatch-icon.svg`).toString()),
+    localimg('user-avatar.svg', fs.readFileSync(`${__dirname}/images/user-avatar.svg`).toString()),
+    localimg('watch-icon-hl.svg', fs.readFileSync(`${__dirname}/images/watch-icon-hl.svg`).toString()),
+    localimg('watch-icon-loading.svg', fs.readFileSync(`${__dirname}/images/watch-icon-loading.svg`).toString()),
+    localimg('watch-icon.svg', fs.readFileSync(`${__dirname}/images/watch-icon.svg`).toString())
+];
+
+const localImages = JSON.parse(localStorage.getItem(IMAGES_ID) || '[]');
+
 let localData = {
     'html-title': 'New Skinomatic skin',
     'html-bodycontent': placeholder( 'Article content goes here' ),
@@ -69,9 +96,17 @@ function getcss() {
         // In future maybe we can use LESS variables?
         .replace(/{{{logo}}}/g, document.getElementById('skinomatic.logo').getAttribute('src'));
 
+    let css = document.getElementById(CSS_ID).value;
+
+    // substitute the images
+    localImages.forEach((img) => {
+        css = css.replace( new RegExp( `/\(\/images\/${img.name}\)/g` ),
+            `${getSVGDataURI(img.text)}` );
+    });
+
     // not sanitized. If user puts `</style><script>alert(1);</script>` JS will run.
     // This is consistent with codepen and JSFiddle.
-    return `${skinfeaturecss} ${document.getElementById(CSS_ID).value}`;
+    return `${skinfeaturecss} ${css}`;
 }
 
 function getmustache() {
@@ -81,6 +116,7 @@ function getmustache() {
 function saveLocally() {
     localStorage.setItem(MUSTACHE_ID,  document.getElementById(MUSTACHE_ID).value);
     localStorage.setItem(CSS_ID, document.getElementById(CSS_ID).value);
+    localStorage.setItem(IMAGES_ID , JSON.stringify(localImages));
 }
 
 function preview() {
@@ -209,11 +245,19 @@ function setLoginData(checked) {
     }
 }
 
+function resetImages() {
+    while(localImages.length){
+        localImages.pop();
+    }
+    defaultImages.forEach((img) => localImages.push(img));
+}
+
 function reset() {
     const mustacheInput = document.getElementById(MUSTACHE_ID);
     const cssInput =  document.getElementById(CSS_ID);
-    cssInput.value = '';
+    cssInput.value = defaultCSS;
     mustacheInput.value = defaultTemplate;
+    resetImages();
 }
 
 function init() {
@@ -221,6 +265,10 @@ function init() {
     const cssInput =  document.getElementById(CSS_ID);
     const contentSelector = document.getElementById(CONTENT_SOURCE_ID);
     const loggedin = document.getElementById('skinomatic.loggedin');
+    const imagesInput = document.getElementById(IMAGES_ID);
+    if(!localStorage.getItem(IMAGES_ID)) {
+        resetImages();
+    }
 
     setmustache(localStorage.getItem(MUSTACHE_ID) || defaultTemplate);
     setcss(
@@ -256,8 +304,41 @@ function init() {
         const uppercaseName = name.charAt(0).toUpperCase() + name.substr(1);
         build(uppercaseName,
             `{{{html-headelement}}}${mustacheInput.value}{{{html-printtail}}}`,
-            cssInput.value, getfeaturenames())
+            cssInput.value, getfeaturenames(), localImages)
     });
+    imagesInput.addEventListener('change', function () {
+        const p = [];
+        this.disabled = true;
+        Array.from(this.files).forEach((f) => {
+            const name = f.name;
+            if (localImages.findIndex((img) => img.name === name) === -1) {
+                p.push(
+                    f.text().then((text) => {
+                        localImages.push( { text, name, src: getSVGDataURI(text) } );
+                    })
+                );
+            }
+        });
+        return Promise.all(p).then(() => {
+            imagesInput.value = '';
+            this.disabled = false;
+            preview();
+        })
+    });
+
+    // setup reactive elements
+      var app = new Vue({
+        el: '#skinomatic-vue',
+        data: {
+          images: localImages
+        },
+        methods: {
+            removeImage: function (name) {
+                localImages.splice(localImages.findIndex(obj => obj.name === name), 1);
+                preview();
+            }
+        }
+      })
 }
 
 init();

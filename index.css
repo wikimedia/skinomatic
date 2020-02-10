@@ -28,6 +28,39 @@ h1 img {
     padding-right: 8px;
 }
 
+.skinomatic__list {
+    list-style: none;
+}
+
+.skinomatic__list__item {
+    padding: 20px;
+    background: #fff;
+}
+
+.skinomatic__list__item__label {
+    background: #000;
+    padding: 4px 8px;
+}
+
+.skinomatic__list__item__button {
+    border: 0;
+    background: none;
+}
+
+.skinomatic__list__item__button:hover {
+    opacity: 0.8;
+}
+
+.skinomatic__list__item__image {
+    padding: 8px 20px;
+}
+
+.skinomatic__list__item__image__img {
+    height: 30px;
+    width: auto;
+    vertical-align: middle;
+}
+
 .skinomatic__buttons {
     position: absolute;
     right: 14px;

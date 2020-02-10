@@ -87,15 +87,19 @@ function skinjson(name, features) {
  * @param {string} css 
  * @param {array} features
  */
-function build(name, template, css, features) {
+function build(name, template, css, features, images) {
     const zip = new JSZip();
     const rootfolder = zip.folder(name);
     const srcfolder = rootfolder.folder('src');
+    const imagesfolder = srcfolder.folder('images');
     rootfolder.file('skin.json', skinjson(name, features))
     srcfolder.file('skin.css', css);
     srcfolder.file('skin.mustache', template);
     addi18n(name, rootfolder);
     addphp(name, rootfolder);
+    images.forEach((image) => {
+        imagesfolder.file(image.name, image.text);
+    })
     zip.generateAsync({ type: 'blob' } )
         .then((content) => saveAs(content, `${name}.zip`))
 }
