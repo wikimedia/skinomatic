@@ -53,6 +53,7 @@ function skinjson(name, features) {
             url: `https://www.mediawiki.org/wiki/Skin:${name}   `,
             author: [ 'Skinomatic' ],
             type: 'skin',
+            'manifest_version': 2,
             ValidSkinNames: {
                 [skinKey]: name
             },
