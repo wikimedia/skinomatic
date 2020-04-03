@@ -2,8 +2,8 @@ import JSZip from 'jszip';
 import saveAs from './FileSaver';
 import fs from 'fs';
 
-const ScaffoldingTemplate = fs.readFileSync(`${__dirname}/../scaffolding/ScaffoldingTemplate.php.txt`).toString();
-const SkinScaffolding = fs.readFileSync(`${__dirname}/../scaffolding/SkinScaffolding.php.txt`).toString();
+const SkinMustache = fs.readFileSync(`${__dirname}/../scaffolding/SkinMustache.php`).toString();
+const MustacheTemplate = fs.readFileSync(`${__dirname}/../scaffolding/MustacheTemplate.php`).toString();
 
 function stringifyjson(json) {
     return JSON.stringify(json, null, 2);
@@ -25,21 +25,21 @@ function addi18n(name, rootfolder) {
 }
 
 function addphp(name, includesfolder) {
-    const skinkey = name.toLowerCase();
-    includesfolder.file(`${name}Template.php`,
-        ScaffoldingTemplate.replace(
-            /{{skin}}/g, name
-        ).replace(
-            /{{skinkey}}/g, skinkey
-        )
-    );
-    includesfolder.file(`Skin${name}.php`,
-    SkinScaffolding.replace(
-        /{{skin}}/g, name
-    ).replace(
-        /{{skinkey}}/g, skinkey
-    )
-);
+    const IMPORTS = `<?php
+namespace Skin${name};
+use SkinTemplate;
+use MwException;
+use BaseTemplate;
+use Profiler;
+use TemplateParser;
+use Linker;
+use Hooks;
+use Html;
+use Xml;
+use Skin;
+`;
+    includesfolder.file(`SkinMustache.php`, SkinMustache.replace('<?php', IMPORTS) );
+    includesfolder.file(`MustacheTemplate.php`, MustacheTemplate.replace('<?php', IMPORTS) );
 }
 
 function skinjson(name, features) {
@@ -55,7 +55,7 @@ function skinjson(name, features) {
             type: 'skin',
             'manifest_version': 2,
             ValidSkinNames: {
-                [skinKey]: name
+                [skinKey]: `${name}\\SkinMustache`
             },
             MessagesDirs: {
                 [name]: [ 'i18n']
@@ -64,12 +64,11 @@ function skinjson(name, features) {
                 localBasePath: '',
                 remoteSkinPath: name
             },
-            AutoloadClasses: {
-                [`${name}Template`]: `${name}Template.php`,
-                [`Skin${name}`]: `Skin${name}.php`
+            AutoloadNamespaces: {
+                [`Skin${name}\\`]: 'includes/'
             },
             ResourceModules: {
-                [`skins.${skinKey}.styles`]: {
+                [`skins.${skinKey}`]: {
                     class: "ResourceLoaderSkinModule",
                     features,
                     styles: [
@@ -92,12 +91,14 @@ function build(name, template, css, features, images) {
     const zip = new JSZip();
     const rootfolder = zip.folder(name);
     const srcfolder = rootfolder.folder('src');
+    const templatefolder = rootfolder.folder('templates');
     const imagesfolder = srcfolder.folder('images');
+    const includesfolder = rootfolder.folder('includes');
     rootfolder.file('skin.json', skinjson(name, features))
     srcfolder.file('skin.css', css);
-    srcfolder.file('skin.mustache', template);
+    templatefolder.file(`${name.toLowerCase()}.mustache`, template);
     addi18n(name, rootfolder);
-    addphp(name, rootfolder);
+    addphp(name, includesfolder);
     images.forEach((image) => {
         imagesfolder.file(image.name, image.text);
     })

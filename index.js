@@ -12,7 +12,7 @@ import { HTML_INDICATORS, htmluserlangattributes, placeholder,
     htmllogoattributes, htmlloggedin,
     htmlpersonaltoolsloggedin, htmlpersonaltools,
     IPSUM_LOREM,
-    portals, datasearch, FOOTER_ROWS,
+    portals, datasearch, FOOTER_ROWS, FOOTER_ICONS,
     htmlviews, htmlnamespaces, htmlvariants,
     printtail, headelement, datamore } from './src/common';
 
@@ -54,9 +54,8 @@ const localImages = JSON.parse(localStorage.getItem(IMAGES_ID) || '[]');
 let localData = {
     'html-title': 'New Skinomatic skin',
     'html-bodycontent': placeholder( 'Article content goes here' ),
-    'data-personal': {
-        'msg-label': 'Personal tools',
-        'html-userlangattributes': htmluserlangattributes,
+    'data-personal-menu': {
+        'label': 'Personal tools',
         'html-loggedin': htmlloggedin,
         'html-personal-tools': htmlpersonaltools
     },
@@ -147,48 +146,50 @@ function preview() {
             'html-userlangattributes': htmluserlangattributes,
             'msg-jumptonavigation': 'Jump to navigation',
             'msg-jumptosearch': 'Jump to search',
-            'data-views': {
-                'tabs-id': 'p-views',
+            'data-page-actions': {
+                'id': 'p-views',
                 'empty-portlet': '',
                 'label-id': 'p-views-label',
                 'msg-label': 'Views',
-                'html-userlangattributes': htmluserlangattributes,
                 'html-items': htmlviews
             },        
             'data-namespaces': {
-                'tabs-id': 'p-namespaces',
+                'id': 'p-namespaces',
                 'empty-portlet': '',
                 'label-id': 'p-namespaces-label',
-                'msg-label': 'Namespaces',
-                'html-userlangattributes': htmluserlangattributes,
+                'label': 'Namespaces',
                 'html-items': htmlnamespaces
             },
-            'data-actions': datamore,
+            'data-page-actions-more': datamore,
             'data-variants': {
+                'id': 'p-variants',
                 'msg-label': '新加坡简体',
-                'menu-id': 'p-variants',
-                'menu-label-id': 'p-variants-label',
-                'html-userlangattributes': htmluserlangattributes,
+                'label-id': 'p-variants-label',
                 'html-items': htmlvariants
             },
             'data-views': {
-                'tabs-id': 'p-views',
+                'id': 'p-views',
                 'empty-portlet': '',
                 'label-id': 'p-views-label',
-                'msg-label': 'Views',
-                'html-userlangattributes': htmluserlangattributes,
+                'label': 'Views',
                 'html-items': htmlviews
             },
-            'data-search': datasearch,
-            'array-portals': portals,
+            'data-search-box': datasearch,
+            'data-sidebar': {
+                'array-portals-rest': portals
+            },
             'html-navigation-heading': 'Navigation menu',
             'html-logo-attributes': htmllogoattributes,
     
             // site specific
-            'array-footer-rows': FOOTER_ROWS,
+            'data-footer-links': FOOTER_ROWS,
+            'data-footer-icons': FOOTER_ICONS,
             'html-sitenotice': placeholder( 'a site notice or central notice banner may go here', 70 ),
             'html-printfooter': `Retrieved from ‘<a dir="ltr" href="#">#?title=this&oldid=blah</a>’`,
             'html-catlinks': placeholder( 'Category links component from mediawiki core', 50 ),
+
+            // messages
+            'msg-search': 'Search',
 
             // extension dependent..
             'html-dataAfterContent': placeholder( 'Extensions can add here e.g. Related Articles.', 100 ),
@@ -237,11 +238,11 @@ function setContentAndPreview(type) {
 
 function setLoginData(checked) {
     if (checked) {
-        localData['data-personal']['html-personal-tools'] = htmlpersonaltoolsloggedin;
-        localData['data-personal']['html-loggedin'] = '';
+        localData['data-personal-menu']['html-items'] = htmlpersonaltoolsloggedin;
+        localData['data-personal-menu']['html-loggedin'] = '';
     } else {
-        localData['data-personal']['html-personal-tools'] = htmlpersonaltools;
-        localData['data-personal']['html-loggedin'] = htmlloggedin;
+        localData['data-personal-menu']['html-items'] = htmlpersonaltools;
+        localData['data-personal-menu']['html-loggedin'] = htmlloggedin;
     }
 }
 

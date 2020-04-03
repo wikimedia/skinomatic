@@ -59,11 +59,11 @@ const FOOTER_ROWS = [
 		'array-items': [
 			{
 				id: 'footer-info-lastmod',
-				html: 'This page was last modified on 10 January 2020, at 21:24.'
+				'html-link': 'This page was last modified on 10 January 2020, at 21:24.'
 			},
 			{
 				id: 'footer-info-copyright',
-				html: `This text is available under the <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike Licence</a>;
+				'html-link': `This text is available under the <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike Licence</a>;
 additional terms may apply. See <a href="https://foundation.wikimedia.org/wiki/Special:MyLanguage/Terms_of_Use">Terms of Use</a> for details.`
 
 			}
@@ -74,48 +74,51 @@ additional terms may apply. See <a href="https://foundation.wikimedia.org/wiki/S
 		'array-items': [
 			{
 				id: 'footer-places-privacy',
-				html: `<a href="https://foundation.wikimedia.org/wiki/Privacy_policy" class="extiw" title="wmf:Privacy policy">Privacy policy</a>`
+				'html-link': `<a href="https://foundation.wikimedia.org/wiki/Privacy_policy" class="extiw" title="wmf:Privacy policy">Privacy policy</a>`
 			},
 			{
 				id: 'footer-places-about',
-				html: `<a href="/wiki/Wikipedia:About" title="Wikipedia:About">About Wikipedia</a>`
+				'html-link': `<a href="/wiki/Wikipedia:About" title="Wikipedia:About">About Wikipedia</a>`
 			},
 			{
 				id: 'footer-places-disclaimer',
-				html: `<a href="/wiki/Wikipedia:General_disclaimer" title="Wikipedia:General disclaimer">Disclaimers</a>`
+				'html-link': `<a href="/wiki/Wikipedia:General_disclaimer" title="Wikipedia:General disclaimer">Disclaimers</a>`
 			},
 			{
 				id: 'footer-places-contact',
-				html: `<a href="//en.wikipedia.org/wiki/Wikipedia:Contact_us">Contact Wikipedia</a>`
+				'html-link': `<a href="//en.wikipedia.org/wiki/Wikipedia:Contact_us">Contact Wikipedia</a>`
 			},
 			{
 				id: 'footer-places-developers',
-				html: `<a href="https://www.mediawiki.org/wiki/Special:MyLanguage/How_to_contribute">Developers</a>`
+				'html-link': `<a href="https://www.mediawiki.org/wiki/Special:MyLanguage/How_to_contribute">Developers</a>`
 			},
 			{
 				id: 'footer-places-statslink',
-				html: `<a href="https://stats.wikimedia.org/v2/#/en.wikipedia.org">Statistics</a>`
+				'html-link': `<a href="https://stats.wikimedia.org/v2/#/en.wikipedia.org">Statistics</a>`
 			},
 			{
 				id: 'footer-places-cookiestatement',
-				html: `<a href="https://foundation.wikimedia.org/wiki/Cookie_statement">Cookie statement</a>`
+				'html-link': `<a href="https://foundation.wikimedia.org/wiki/Cookie_statement">Cookie statement</a>`
 			},
 			{
 				id: 'footer-places-mobileview',
-				html: `<a href="//en.m.wikipedia.org/w/index.php?title=Paris&amp;useskin=vector&amp;mobileaction=toggle_view_mobile" class="noprint stopMobileRedirectToggle">Mobile view</a>`
+				'html-link': `<a href="//en.m.wikipedia.org/w/index.php?title=Paris&amp;useskin=vector&amp;mobileaction=toggle_view_mobile" class="noprint stopMobileRedirectToggle">Mobile view</a>`
 			}
 		]
-	},
+	}
+];
+
+const FOOTER_ICONS = [
 	{
 		id: 'footer-icons',
 		'array-items': [
 			{
 				id: 'footer-copyrightico',
-				html: `<a href="https://wikimediafoundation.org/"><img src="https://wikipedia.org/static/images/wikimedia-button.png" srcset="https://wikipedia.org/static/images/wikimedia-button-1.5x.png 1.5x, https://wikipedia.org/static/images/wikimedia-button-2x.png 2x" width="88" height="31" alt="Wikimedia Foundation"/></a>`
+				'html-img': `<a href="https://wikimediafoundation.org/"><img src="https://wikipedia.org/static/images/wikimedia-button.png" srcset="https://wikipedia.org/static/images/wikimedia-button-1.5x.png 1.5x, https://wikipedia.org/static/images/wikimedia-button-2x.png 2x" width="88" height="31" alt="Wikimedia Foundation"/></a>`
 			},
 			{
 				id: 'footer-poweredbyico',
-				html: `<a href="https://www.mediawiki.org/"><img src="https://wikipedia.org/static/images/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="https://wikipedia.org/static/images/poweredby_mediawiki_132x47.png 1.5x, https://wikipedia.org/static/images/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>`
+				'html-img': `<a href="https://www.mediawiki.org/"><img src="https://wikipedia.org/static/images/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="https://wikipedia.org/static/images/poweredby_mediawiki_132x47.png 1.5x, https://wikipedia.org/static/images/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>`
 			}
 		]
 	}
@@ -179,14 +182,10 @@ const htmlvariants = `<li id="ca-varlang-0">
 </li>`;
 
 const datasearch = {
-	searchActionURL: '/w/index.php',
-	searchHeaderAttrsHTML: 'dir="ltr" lang="en-GB"',
-	searchInputLabel: 'Search',
-	searchDivID: 'simpleSearch',
-	searchInputHTML: '<input type="search" name="search" placeholder="Search Wikipedia" title="Search Wikipedia [⌃⌥f]" accesskey="f" id="searchInput" autocomplete="off">',
-	titleHTML: '<input type="hidden" value="Special:Search" name="title">',
-	fallbackSearchButtonHTML: '<input type="submit" name="fulltext" value="Search" title="Search pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/>',
-	searchButtonHTML: '<input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton">'
+	'action-url': '/w/index.php',
+	'html-input': '<input type="search" name="search" placeholder="Search Wikipedia" title="Search Wikipedia [⌃⌥f]" accesskey="f" id="searchInput" autocomplete="off">',
+	'html-input-searchtitle': '<input type="hidden" value="Special:Search" name="title">',
+	'html-button-go': '<input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton">'
 };
 
 const portletAfter = (html) => {
@@ -198,7 +197,6 @@ const portals = [
 		'portal-id': 'p-navigation',
 		'msg-label': 'Navigation',
 		'msg-label-id': 'p-navigation-label',
-		'html-userlangattributes': htmluserlangattributes,
 		'html-portal-content': `<ul>
 		<li id="n-mainpage-description"><a href="/wiki/Main_Page" title="Visit the main page [⌃⌥z]" accesskey="z">Main page</a></li><li id="n-contents"><a href="/wiki/Wikipedia:Contents" title="Guides to browsing Wikipedia">Contents</a></li><li id="n-featuredcontent"><a href="/wiki/Wikipedia:Featured_content" title="Featured content – the best of Wikipedia">Featured content</a></li><li id="n-currentevents"><a href="/wiki/Portal:Current_events" title="Find background information on current events">Current events</a></li><li id="n-randompage"><a href="/wiki/Special:Random" title="Load a random page [⌃⌥x]" accesskey="x">Random page</a></li><li id="n-sitesupport"><a href="https://donate.wikimedia.org/wiki/Special:FundraiserRedirector?utm_source=donate&amp;utm_medium=sidebar&amp;utm_campaign=C13_en.wikipedia.org&amp;uselang=en" title="Support us">Donate</a></li><li id="n-shoplink"><a href="//shop.wikimedia.org" title="Visit the Wikipedia store">Wikipedia store</a></li>
 </ul>`,
@@ -209,7 +207,6 @@ const portals = [
 		'html-tooltip': 'A message tooltip-p-tb must exist for this to appear',
 		'msg-label': 'Tools',
 		'msg-label-id': 'p-tb-label',
-		'html-userlangattributes': htmluserlangattributes,
 		'html-portal-content': `<ul>
 <li id="t-whatlinkshere"><a href="/wiki/Special:WhatLinksHere/Spain" title="A list of all wiki pages that link here [⌃⌥j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="/wiki/Special:RecentChangesLinked/Spain" rel="nofollow" title="Recent changes in pages linked from this page [⌃⌥k]" accesskey="k">Related changes</a></li><li id="t-upload"><a href="/wiki/Wikipedia:File_Upload_Wizard" title="Upload files [⌃⌥u]" accesskey="u">Upload file</a></li><li id="t-specialpages"><a href="/wiki/Special:SpecialPages" title="A list of all special pages [⌃⌥q]" accesskey="q">Special pages</a></li><li id="t-permalink"><a href="/w/index.php?title=Spain&amp;oldid=935087243" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/w/index.php?title=Spain&amp;action=info" title="More information about this page">Page information</a></li><li id="t-wikibase"><a href="https://www.wikidata.org/wiki/Special:EntityPage/Q29" title="Link to connected data repository item [⌃⌥g]" accesskey="g">Wikidata item</a></li><li id="t-cite"><a href="/w/index.php?title=Special:CiteThisPage&amp;page=Spain&amp;id=935087243" title="Information on how to cite this page">Cite this page</a></li>
 </ul>`,
@@ -273,5 +270,6 @@ export {
 	htmlviews, htmlnamespaces, datasearch,
 	portals,
 	htmlvariants,
+	FOOTER_ICONS,
 	FOOTER_ROWS
 };

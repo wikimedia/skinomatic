@@ -31,21 +31,21 @@
 <div id="mw-navigation">
     <h2>{{{html-navigation-heading}}}</h2>
     <div id="mw-head">
-        {{#data-personal}}
+        {{#data-personal-menu}}
         <div id="p-personal" role="navigation" {{#empty-portlet}}class="{{empty-portlet}}"{{/empty-portlet}} aria-labelledby="p-personal-label">
-            <h3 id="p-personal-label">{{msg-label}}</h3>
+            <h3 id="p-personal-label">{{label}}</h3>
             <ul {{{html-userlangattributes}}}>
                     {{{html-lang-selector}}}
                     {{{html-loggedin}}}
-                    {{{html-personal-tools}}}
+                    {{{html-items}}}
             </ul>
         </div>
-        {{/data-personal}}
+        {{/data-personal-menu}}
         <div id="left-navigation">
             {{#data-namespaces}}
             {{! VectorTabs}}
-            <div id="{{tabs-id}}" role="navigation" class="vectorTabs {{empty-portlet}}" aria-labelledby="{{label-id}}">
-                    <h3 id="{{label-id}}">{{msg-label}}</h3>
+            <div id="{{id}}" role="navigation" class="vectorTabs {{empty-portlet}}" aria-labelledby="{{label-id}}">
+                    <h3 id="{{label-id}}">{{label}}</h3>
                     <ul {{{html-userlangattributes}}}>
                             {{{html-items}}}
                     </ul>
@@ -54,10 +54,10 @@
             {{/data-namespaces}}
             {{#data-variants}}
             {{! VectorMenu}}
-            <div id="{{menu-id}}" role="navigation" class="vectorMenu {{empty-portlet}}" aria-labelledby="{{menu-label-id}}">
-                    <input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="{{menu-label-id}}" />
-                    <h3 id="{{menu-label-id}}">
-                            <span>{{msg-label}}</span>
+            <div id="{{id}}" role="navigation" class="vectorMenu {{empty-portlet}}" aria-labelledby="{{label-id}}">
+                    <input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="{{label-id}}" />
+                    <h3 id="{{label-id}}">
+                            <span>{{label}}</span>
                     </h3>
                     <ul class="menu" {{{html-userlangattributes}}}>
                             {{{html-items}}}
@@ -68,39 +68,39 @@
         </div>
         <div id="right-navigation">
             {{! VectorTabs}}
-            {{#data-views}}
+            {{#data-page-actions}}
             {{! /VectorTabs}}
-            <div id="{{tabs-id}}" role="navigation" class="vectorTabs {{empty-portlet}}" aria-labelledby="{{label-id}}">
-                    <h3 id="{{label-id}}">{{msg-label}}</h3>
+            <div id="{{id}}" role="navigation" class="vectorTabs {{empty-portlet}}" aria-labelledby="{{label-id}}">
+                    <h3 id="{{label-id}}">{{label}}</h3>
                     <ul {{{html-userlangattributes}}}>
                             {{{html-items}}}
                     </ul>
             </div>
             {{! /VectorTabs}}
-            {{/data-views}}
-            {{#data-actions}}
+            {{/data-page-actions}}
+            {{#data-page-actions-more}}
             {{! VectorMenu}}
-            <div id="{{menu-id}}" role="navigation" class="vectorMenu {{empty-portlet}}" aria-labelledby="{{menu-label-id}}">
-                    <input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="{{menu-label-id}}" />
-                    <h3 id="{{menu-label-id}}">
-                            <span>{{msg-label}}</span>
+            <div id="{{id}}" role="navigation" class="vectorMenu {{empty-portlet}}" aria-labelledby="{{label-id}}">
+                    <input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="{{label-id}}" />
+                    <h3 id="{{label-id}}">
+                            <span>{{msg-vector-more-actions}}</span>
                     </h3>
                     <ul class="menu" {{{html-userlangattributes}}}>
                             {{{html-items}}}
                     </ul>
             </div>
             {{! /VectorMenu}}
-            {{/data-actions}}
-            {{#data-search}}
+            {{/data-page-actions-more}}
+            {{#data-search-box}}
             {{! Search}}
             <div id="p-search" role="search">
-                <h3 {{{searchHeaderAttrsHTML}}}>
-                    <label for="searchInput">{{searchInputLabel}}</label>
+                <h3 {{{html-userlangattributes}}}>
+                    <label for="searchInput">{{msg-search}}</label>
                 </h3>
-                <form action="{{searchActionURL}}" id="searchform">
-                    <div id="{{searchDivID}}">
-                        {{{searchInputHTML}}}
-                        {{{titleHTML}}}
+                <form action="{{action-url}}" id="searchform">
+                    <div id="simpleSearch">
+                        {{{html-input}}}
+                        {{{html-input-searchtitle}}}
                         {{!     We construct two buttons (for 'go' and 'fulltext' search modes), but only one will be
                                         visible and actionable at a time (they are overlaid on top of each other in CSS).
                                         * Browsers will use the 'fulltext' one by default (as it's the first in tree-order),
@@ -109,40 +109,61 @@
                                         * The mediawiki.searchSuggest module, after doing tests for the broken browsers, removes
                                                 the 'fulltext' button and handles 'fulltext' search itself; this will reveal the 'go'
                                                 button and cause it to be used. !}}
-                        {{{fallbackSearchButtonHTML}}}
+                        {{{html-button-go}}}
                         {{{searchButtonHTML}}}
                     </div>
                 </form>
             </div>
             {{! /Search}}
-            {{/data-search}}
+            {{/data-search-box}}
         </div>
     </div>
     <div id="mw-panel">
         <div id="p-logo" role="banner">
             <a {{{html-logo-attributes}}}></a>
         </div>
-        {{#array-portals}}
+        {{#data-sidebar}}
+        {{#data-portals-first}}
         {{! Number of portals and order can change}}
-        <div class="portal" role="navigation" id="{{portal-id}}" {{{html-tooltip}}} aria-labelledby="{{msg-label-id}}">
-            <h3 {{{html-userlangattributes}}} id="{{msg-label-id}}">
-                    {{msg-label}}
+        <div class="portal" role="navigation" id="{{portal-id}}" aria-labelledby="{{label-id}}">
+            <h3 {{{html-userlangattributes}}} id="{{label-id}}">
+                    {{label}}
             </h3>
             <div class="body">
                     {{{html-portal-content}}}
                     {{{html-after-portal}}}
             </div>
         </div>
-        {{/array-portals}}
+        {{/data-portals-first}}
+        {{#array-portals-rest}}
+        {{! Number of portals and order can change}}
+        <div class="portal" role="navigation" id="{{portal-id}}" aria-labelledby="{{label-id}}">
+            <h3 {{{html-userlangattributes}}} id="{{label-id}}">
+                    {{label}}
+            </h3>
+            <div class="body">
+                    {{{html-portal-content}}}
+                    {{{html-after-portal}}}
+            </div>
+        </div>
+        {{/array-portals-rest}}
+        {{/data-sidebar}}
     </div>
 </div>
 <div id="footer" role="contentinfo" {{{html-userlangattributes}}}>
-        {{#array-footer-rows}}
+        {{#data-footer-links}}
         <ul id="{{id}}" class="{{className}}">
                 {{#array-items}}
-                <li id="{{id}}">{{{html}}}</li>
+                <li id="{{id}}">{{{html-link}}}</li>
                 {{/array-items}}
         </ul>
-        {{/array-footer-rows}}
+        {{/data-footer-links}}
+        {{#data-footer-icons}}
+        <ul id="footer-icons" class="noprint">
+                {{#array-items}}
+                <li id="{{id}}">{{{html-img}}}</li>
+                {{/array-items}}
+        </ul>
+        {{/data-footer-icons}}
         <div style="clear: both;"></div>
 </div>
