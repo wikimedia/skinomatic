@@ -23,31 +23,15 @@ const SKIN_FEATURES = {
     interface: fs.readFileSync(`${__dirname}/skin-module-features/interface.css`).toString()
 };
 
-let defaultTemplate = fs.readFileSync(`${__dirname}/vector.mustache` ).toString();
-let defaultCSS = fs.readFileSync(`${__dirname}/styles.css` ).toString();
+let defaultTemplate = '';
+let defaultCSS = '';
+let defaultImages = [];
 
 const getSVGDataURI = (text) => `data:image/svg+xml;utf8,${encodeURIComponent(text)}`;
 
-const localimg = (name, text) => {
-    return {
-        name,
-        text,
-        src: getSVGDataURI(text)
-    }
-};
-
-const defaultImages = [
-    localimg('arrow-down.svg', fs.readFileSync(`${__dirname}/images/arrow-down.svg`).toString()),
-    localimg('bullet-icon.svg', fs.readFileSync(`${__dirname}/images/bullet-icon.svg`).toString()),
-    localimg('external-link-ltr-icon.svg', fs.readFileSync(`${__dirname}/images/external-link-ltr-icon.svg`).toString()),
-    localimg('search.svg', fs.readFileSync(`${__dirname}/images/search.svg`).toString()),
-    localimg('unwatch-icon-hl.svg', fs.readFileSync(`${__dirname}/images/unwatch-icon-hl.svg`).toString()),
-    localimg('unwatch-icon.svg', fs.readFileSync(`${__dirname}/images/unwatch-icon.svg`).toString()),
-    localimg('user-avatar.svg', fs.readFileSync(`${__dirname}/images/user-avatar.svg`).toString()),
-    localimg('watch-icon-hl.svg', fs.readFileSync(`${__dirname}/images/watch-icon-hl.svg`).toString()),
-    localimg('watch-icon-loading.svg', fs.readFileSync(`${__dirname}/images/watch-icon-loading.svg`).toString()),
-    localimg('watch-icon.svg', fs.readFileSync(`${__dirname}/images/watch-icon.svg`).toString())
-];
+function getThemeDirectory( skinName ) {
+    return `/themes/${skinName}`;
+}
 
 const localImages = JSON.parse(localStorage.getItem(IMAGES_ID) || '[]');
 
@@ -133,7 +117,7 @@ function preview() {
         doc = iframe.document;
     }
 
-    doc.open('');
+    doc.open('/loading.html');
     doc.writeln(
         mustache.render(`{{{html-headelement}}}${template}{{{html-printtail}}}`, Object.assign( localData, {
             'html-headelement': headelement(css, [
@@ -261,6 +245,13 @@ function reset() {
     resetImages();
 }
 
+function setcssWithImgSubstitutions(css) {
+    setcss(
+        css.replace(/\url\(\/static\/images\//g, 'url(https://en.wikipedia.org/static/images/')
+            .replace(/\url\(\/w\//g, 'url(https://en.wikipedia.org/w/')
+    )
+}
+
 function init() {
     const mustacheInput = document.getElementById(MUSTACHE_ID);
     const cssInput =  document.getElementById(CSS_ID);
@@ -270,13 +261,11 @@ function init() {
     if(!localStorage.getItem(IMAGES_ID)) {
         resetImages();
     }
-
-    setmustache(localStorage.getItem(MUSTACHE_ID) || defaultTemplate);
-    setcss(
-        ( localStorage.getItem(CSS_ID) || defaultCSS )
-            .replace(/\url\(\/static\/images\//g, 'url(https://en.wikipedia.org/static/images/')
-            .replace(/\url\(\/w\//g, 'url(https://en.wikipedia.org/w/')
-    );
+    const localData = [localStorage.getItem(MUSTACHE_ID), localStorage.getItem(CSS_ID)];
+    if (localData[0]) {
+        setmustache(localData[0]);
+        setcssWithImgSubstitutions(localData[1]);
+    }
 
     // set up event listeners
     cssInput.addEventListener('input', debounce(preview));
@@ -342,4 +331,57 @@ function init() {
       })
 }
 
-init();
+function loadSkin(name) {
+    const root = getThemeDirectory(name);
+    return Promise.all( [
+        fetch(`${root}/index.json`).then(
+            (r) => r.json(),
+            () => {
+                console.log('a');
+                return Promise.resolve({
+                    images: []
+                })
+            }
+        )
+            .then((r) => {
+                return Promise.all(
+                    (r && r.images || []).map((name) => {
+                        return fetch(`${root}/images/${name}`).then((r) => r.text())
+                            .then((text) => {
+                                return {
+                                    name,
+                                    text,
+                                    text: getSVGDataURI(text)
+                                };
+                            });
+                    })
+                )
+            }),
+        fetch(`${root}/skin.mustache`).then((r) => r.text()),
+        fetch(`${root}/styles.css`).then((r) => r.text())
+    ] ).then((res) => {
+        defaultImages = res[0];
+        defaultTemplate = res[1];
+        defaultCSS = res[2];
+        setmustache(defaultTemplate);
+        setcssWithImgSubstitutions(defaultCSS);
+        preview();
+    });
+}
+
+fetch('/themes/index.json').then((r) => r.json())
+    .then(( skins ) => {
+        const select = document.createElement('select');
+        skins.forEach((s) => {
+            const o = document.createElement('option');
+            o.value = s;
+            o.textContent = s;
+            select.append(o);
+        });
+        loadSkin(skins[0]).then(init);
+        select.addEventListener('change', function () {
+            loadSkin(this.value);
+        });
+        document.querySelector('.skinomatic__buttons').prepend( select );
+    })
+
