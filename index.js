@@ -99,11 +99,10 @@ function getmustache() {
 function saveLocally() {
     localStorage.setItem(MUSTACHE_ID,  document.getElementById(MUSTACHE_ID).value);
     localStorage.setItem(CSS_ID, document.getElementById(CSS_ID).value);
-    localStorage.setItem(IMAGES_ID , JSON.stringify(localImages));
+    localStorage.setItem(IMAGES_ID, JSON.stringify(localImages));
 }
 
 function preview() {
-    saveLocally();
     const css = getcss();
     const template = getmustache();
     let doc;
@@ -252,6 +251,11 @@ function setcssWithImgSubstitutions(css) {
     )
 }
 
+function saveLocallyAndPreview() {
+    saveLocally();
+    preview();
+}
+
 function init() {
     const mustacheInput = document.getElementById(MUSTACHE_ID);
     const cssInput =  document.getElementById(CSS_ID);
@@ -268,8 +272,8 @@ function init() {
     }
 
     // set up event listeners
-    cssInput.addEventListener('input', debounce(preview));
-    mustacheInput.addEventListener('input', debounce(preview));
+    cssInput.addEventListener('input', debounce(saveLocallyAndPreview));
+    mustacheInput.addEventListener('input', debounce(saveLocallyAndPreview));
     contentSelector.addEventListener('change', function (ev) {
         setContentAndPreview(this.value);
     });
