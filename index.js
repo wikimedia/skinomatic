@@ -34,6 +34,7 @@ import { placeholder,
 const SKIN_FEATURES = {
     elements: fs.readFileSync(`${__dirname}/skin-module-features/elements.css`).toString(),
     content: fs.readFileSync(`${__dirname}/skin-module-features/content.css`).toString(),
+    legacy: fs.readFileSync(`${__dirname}/skin-module-features/legacy.css`).toString(),
     logo: fs.readFileSync(`${__dirname}/skin-module-features/logo.css`).toString(),
     interface: fs.readFileSync(`${__dirname}/skin-module-features/interface.css`).toString()
 };
@@ -342,6 +343,11 @@ function loadSkin(name) {
             }
         )
             .then((r) => {
+                Array.from(
+                    document.querySelectorAll('.skin__features')
+                ).forEach((el) => {
+                    el.checked = ( r.features || [] ).indexOf( el.value ) > -1;
+                });
                 document.getElementById(NAME_ID).value = r.name || name;
                 return Promise.all( [ Promise.all(
                     (r && r.images || []).map((name) => {

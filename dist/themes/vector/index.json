@@ -8,6 +8,7 @@
         "SearchBox",
         "Sidebar"
     ],
+    "features": [ "elements", "content", "interface", "logo", "legacy" ],
     "images": [
         "arrow-down.svg",
         "bullet-icon.svg",
