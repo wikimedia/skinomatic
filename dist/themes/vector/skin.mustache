@@ -1,9 +1,46 @@
+{{!
+	string html-headelement a string of attribute HTML that begins with `<html>` and ends with
+		`</head>` and contains `meta` tags and ResourceLoader internals.
+	string|null html-sitenotice the contents of a banner defined in MediaWiki:Sitenotice.
+		Also used by CentralNotice to inject banners into Vector.
+	Indicator[] data-indicators wiki-defined badges such as "good article",
+		"featured article". An empty array if none are defined.
+	string page-langcode the content language of the article. Assumed to be escaped HTML.
+	string html-title
+	string html-prebodyhtml
+	bool page-isarticle
+	string msg-tagline
+	string html-subtitle
+	string html-undelete
+	string html-newtalk
+	string msg-vector-jumptonavigation
+	string msg-vector-jumptosearch
+	string html-bodycontent
+	string html-printfooter
+	string html-catlinks
+	string html-debuglog
+	string html-dataAfterContent
+	string html-navigation-heading heading for entire navigation that is
+		usually hidden to screen readers
+	MenuDefinition data-personal-menu
+	MenuDefinition data-namespace-tabs
+	MenuDefinition data-variants
+	MenuDefinition data-page-actions
+	MenuDefinition data-page-actions-more
+	object data-search-box. See SearchBox.mustache for documentation.
+	object data-sidebar. See Sidebar.mustache for documentation.
+	object data-footer for footer template partial. see Footer.mustache for documentation.
+	string html-printtail HTML to render at the end of the page contained necessary script tags for
+		ResourceLoader terminated with `</body></html>`.
+}}
 <div id="mw-page-base" class="noprint"></div>
 <div id="mw-head-base" class="noprint"></div>
 <div id="content" class="mw-body" role="main">
 	<a id="top"></a>
-	{{#html-sitenotice}}<div id="siteNotice" class="mw-body-content">{{{html-sitenotice}}}</div>{{/html-sitenotice}}
-	{{{html-indicators}}}
+	{{#html-sitenotice}}
+		<div id="siteNotice" class="mw-body-content">{{{html-sitenotice}}}</div>
+	{{/html-sitenotice}}
+	{{>Indicators}}
 	<h1 id="firstHeading" class="firstHeading" lang="{{page-langcode}}">{{{html-title}}}</h1>
 	{{{html-prebodyhtml}}}
 	<div id="bodyContent" class="mw-body-content">
@@ -12,12 +49,12 @@
 		{{#html-undelete}}<div id="contentSub2">{{{html-undelete}}}</div>{{/html-undelete}}
 		{{#html-newtalk}}<div class="usermessage">{{{html-newtalk}}}</div>{{/html-newtalk}}
 		{{!
-		Keep this empty `div` for compatibility with gadgets and user scripts
-		using this place to insert extra elements before.
+			Keep this empty `div` for compatibility with gadgets and user scripts
+			using this place to insert extra elements before.
 		}}
 		<div id="jump-to-nav"></div>
-		<a class="mw-jump-link" href="#mw-head">{{msg-jumptonavigation}}</a>
-		<a class="mw-jump-link" href="#p-search">{{msg-jumptosearch}}</a>
+		<a class="mw-jump-link" href="#mw-head">{{msg-vector-jumptonavigation}}</a>
+		<a class="mw-jump-link" href="#p-search">{{msg-vector-jumptosearch}}</a>
 		{{{html-bodycontent}}}
 		{{#html-printfooter}}
 		<div class="printfooter">{{{html-printfooter}}}</div>
@@ -29,141 +66,20 @@
 </div>
 {{{html-dataAfterContent}}}
 <div id="mw-navigation">
-    <h2>{{{html-navigation-heading}}}</h2>
-    <div id="mw-head">
-        {{#data-personal-menu}}
-        <div id="p-personal" role="navigation" {{#empty-portlet}}class="{{empty-portlet}}"{{/empty-portlet}} aria-labelledby="p-personal-label">
-            <h3 id="p-personal-label">{{label}}</h3>
-            <ul {{{html-userlangattributes}}}>
-                    {{{html-lang-selector}}}
-                    {{{html-loggedin}}}
-                    {{{html-items}}}
-            </ul>
-        </div>
-        {{/data-personal-menu}}
-        <div id="left-navigation">
-            {{#data-namespaces}}
-            {{! VectorTabs}}
-            <div id="{{id}}" role="navigation" class="vectorTabs {{empty-portlet}}" aria-labelledby="{{label-id}}">
-                    <h3 id="{{label-id}}">{{label}}</h3>
-                    <ul {{{html-userlangattributes}}}>
-                            {{{html-items}}}
-                    </ul>
-            </div>
-            {{! /VectorTabs}}
-            {{/data-namespaces}}
-            {{#data-variants}}
-            {{! VectorMenu}}
-            <div id="{{id}}" role="navigation" class="vectorMenu {{empty-portlet}}" aria-labelledby="{{label-id}}">
-                    <input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="{{label-id}}" />
-                    <h3 id="{{label-id}}">
-                            <span>{{label}}</span>
-                    </h3>
-                    <ul class="menu" {{{html-userlangattributes}}}>
-                            {{{html-items}}}
-                    </ul>
-            </div>
-            {{! /VectorMenu}}
-            {{/data-variants}}
-        </div>
-        <div id="right-navigation">
-            {{! VectorTabs}}
-            {{#data-page-actions}}
-            {{! /VectorTabs}}
-            <div id="{{id}}" role="navigation" class="vectorTabs {{empty-portlet}}" aria-labelledby="{{label-id}}">
-                    <h3 id="{{label-id}}">{{label}}</h3>
-                    <ul {{{html-userlangattributes}}}>
-                            {{{html-items}}}
-                    </ul>
-            </div>
-            {{! /VectorTabs}}
-            {{/data-page-actions}}
-            {{#data-page-actions-more}}
-            {{! VectorMenu}}
-            <div id="{{id}}" role="navigation" class="vectorMenu {{empty-portlet}}" aria-labelledby="{{label-id}}">
-                    <input type="checkbox" class="vectorMenuCheckbox" aria-labelledby="{{label-id}}" />
-                    <h3 id="{{label-id}}">
-                            <span>{{msg-vector-more-actions}}</span>
-                    </h3>
-                    <ul class="menu" {{{html-userlangattributes}}}>
-                            {{{html-items}}}
-                    </ul>
-            </div>
-            {{! /VectorMenu}}
-            {{/data-page-actions-more}}
-            {{#data-search-box}}
-            {{! Search}}
-            <div id="p-search" role="search">
-                <h3 {{{html-userlangattributes}}}>
-                    <label for="searchInput">{{msg-search}}</label>
-                </h3>
-                <form action="{{action-url}}" id="searchform">
-                    <div id="simpleSearch">
-                        {{{html-input}}}
-                        {{{html-input-searchtitle}}}
-                        {{!     We construct two buttons (for 'go' and 'fulltext' search modes), but only one will be
-                                        visible and actionable at a time (they are overlaid on top of each other in CSS).
-                                        * Browsers will use the 'fulltext' one by default (as it's the first in tree-order),
-                                                which is desirable when they are unable to show search suggestions (either due to being
-                                                broken or having JavaScript turned off).
-                                        * The mediawiki.searchSuggest module, after doing tests for the broken browsers, removes
-                                                the 'fulltext' button and handles 'fulltext' search itself; this will reveal the 'go'
-                                                button and cause it to be used. !}}
-                        {{{html-button-go}}}
-                        {{{searchButtonHTML}}}
-                    </div>
-                </form>
-            </div>
-            {{! /Search}}
-            {{/data-search-box}}
-        </div>
-    </div>
-    <div id="mw-panel">
-        <div id="p-logo" role="banner">
-            <a {{{html-logo-attributes}}}></a>
-        </div>
-        {{#data-sidebar}}
-        {{#data-portals-first}}
-        {{! Number of portals and order can change}}
-        <div class="portal" role="navigation" id="{{portal-id}}" aria-labelledby="{{label-id}}">
-            <h3 {{{html-userlangattributes}}} id="{{label-id}}">
-                    {{label}}
-            </h3>
-            <div class="body">
-                    {{{html-portal-content}}}
-                    {{{html-after-portal}}}
-            </div>
-        </div>
-        {{/data-portals-first}}
-        {{#array-portals-rest}}
-        {{! Number of portals and order can change}}
-        <div class="portal" role="navigation" id="{{portal-id}}" aria-labelledby="{{label-id}}">
-            <h3 {{{html-userlangattributes}}} id="{{label-id}}">
-                    {{label}}
-            </h3>
-            <div class="body">
-                    {{{html-portal-content}}}
-                    {{{html-after-portal}}}
-            </div>
-        </div>
-        {{/array-portals-rest}}
-        {{/data-sidebar}}
-    </div>
+	<h2>{{{html-navigation-heading}}}</h2>
+	<div id="mw-head">
+		{{#data-personal-menu}}{{>Menu}}{{/data-personal-menu}}
+		<div id="left-navigation">
+			{{#data-namespace-tabs}}{{>Menu}}{{/data-namespace-tabs}}
+			{{#data-variants}}{{>Menu}}{{/data-variants}}
+		</div>
+		<div id="right-navigation">
+			{{#data-page-actions}}{{>Menu}}{{/data-page-actions}}
+			{{#data-page-actions-more}}{{>Menu}}{{/data-page-actions-more}}
+			{{#data-search-box}}{{>SearchBox}}{{/data-search-box}}
+		</div>
+	</div>
+	{{#data-sidebar}}{{>Sidebar}}{{/data-sidebar}}
 </div>
-<div id="footer" role="contentinfo" {{{html-userlangattributes}}}>
-        {{#data-footer-links}}
-        <ul id="{{id}}" class="{{className}}">
-                {{#array-items}}
-                <li id="{{id}}">{{{html-link}}}</li>
-                {{/array-items}}
-        </ul>
-        {{/data-footer-links}}
-        {{#data-footer-icons}}
-        <ul id="footer-icons" class="noprint">
-                {{#array-items}}
-                <li id="{{id}}">{{{html-img}}}</li>
-                {{/array-items}}
-        </ul>
-        {{/data-footer-icons}}
-        <div style="clear: both;"></div>
-</div>
+{{#data-footer}}{{>Footer}}{{/data-footer}}
+

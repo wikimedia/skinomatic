@@ -1,7 +1,12 @@
 {
     "name": "Vector",
     "partials": [
-
+        "Footer",
+        "Indicators",
+        "Logo",
+        "Menu",
+        "SearchBox",
+        "Sidebar"
     ],
     "images": [
         "arrow-down.svg",
