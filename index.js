@@ -5,6 +5,7 @@ import build from './src/build';
 const NAME_ID = 'skinomatic.title';
 const IMAGES_ID = 'skinomatic.images';
 const MUSTACHE_ID = 'skinomatic.mustache';
+const TEMPLATE_CHOOSER_ID = 'skinomatic.templates';
 const CSS_ID = 'skinomatic.css';
 const RESET_ID = 'skinomatic.reset';
 const CONTENT_SOURCE_ID = 'skinomatic.content';
@@ -24,6 +25,7 @@ const SKIN_FEATURES = {
     interface: fs.readFileSync(`${__dirname}/skin-module-features/interface.css`).toString()
 };
 
+let currentSkin = {};
 let defaultTemplate = '';
 let defaultCSS = '';
 let defaultImages = [];
@@ -68,7 +70,13 @@ function setcss(value) {
 }
 
 function setmustache(value) {
+    const partials = currentSkin.partials || {};
     document.getElementById(MUSTACHE_ID).value = value;
+    const select = document.getElementById(TEMPLATE_CHOOSER_ID);
+    // will be editable later.
+    select.disabled = true;
+    Object.keys( partials ).forEach((key) =>
+        addOption(select, `${key}.mustache`, key));
 }
 
 function getfeaturenames() {
@@ -181,7 +189,7 @@ function preview() {
             'html-dataAfterContent': placeholder( 'Extensions can add here e.g. Related Articles.', 100 ),
             'html-indicators': HTML_INDICATORS,
             'html-subtitle': placeholder( 'Extensions can configure subtitle', 20 )
-        } ) )
+        } ), currentSkin.partials )
     );
     doc.close();
 }
@@ -326,7 +334,7 @@ function init() {
         const uppercaseName = name.charAt(0).toUpperCase() + name.substr(1);
         build(uppercaseName,
             `{{{html-headelement}}}${mustacheInput.value}{{{html-printtail}}}`,
-            cssInput.value, getfeaturenames(), localImages)
+            cssInput.value, getfeaturenames(), localImages, currentSkin.partials)
     });
     imagesInput.addEventListener('change', function () {
         const p = [];
@@ -379,7 +387,7 @@ function loadSkin(name) {
         )
             .then((r) => {
                 document.getElementById(NAME_ID).value = r.name || name;
-                return Promise.all(
+                return Promise.all( [ Promise.all(
                     (r && r.images || []).map((name) => {
                         return fetch(`${root}/images/${name}`).then((r) => r.text())
                             .then((text) => {
@@ -390,12 +398,28 @@ function loadSkin(name) {
                                 };
                             });
                     })
-                )
+                ), Promise.all(
+                    (r && r.partials || []).map((name) => {
+                        return fetch(`${root}/${name}.mustache`).then((r) => r.text())
+                            .then((text) => {
+                                return {
+                                    name,
+                                    text
+                                };
+                            });
+                    })
+                ) ] );
             }),
         fetch(`${root}/skin.mustache`).then((r) => r.text()),
         fetch(`${root}/styles.css`).then((r) => r.text())
     ] ).then((res) => {
-        defaultImages = res[0];
+        const assets = res[0];
+        defaultImages = assets[0];
+        const partials = {};
+        assets[1].forEach((p) => {
+            partials[p.name] = p.text;
+        });
+        currentSkin.partials = partials;
         defaultTemplate = res[1];
         defaultCSS = res[2];
         setmustache(defaultTemplate);

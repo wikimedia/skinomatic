@@ -1,5 +1,8 @@
 {
     "name": "Vector",
+    "partials": [
+
+    ],
     "images": [
         "arrow-down.svg",
         "bullet-icon.svg",

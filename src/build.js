@@ -97,16 +97,21 @@ function skinjson(name, features) {
  * @param {string} template 
  * @param {string} css 
  * @param {array} features
+ * @param {Object} partials where key is the name of the template minus
+ * the mustache suffix and the text is its content
  */
-function build(name, template, css, features, images) {
+function build(name, template, css, features, images, partials) {
     const zip = new JSZip();
     const rootfolder = zip.folder(name);
     const srcfolder = rootfolder.folder('src');
     const templatefolder = rootfolder.folder('templates');
     const imagesfolder = srcfolder.folder('images');
     const includesfolder = rootfolder.folder('includes');
-    rootfolder.file('skin.json', skinjson(name, features))
+    rootfolder.file('skin.json', skinjson(name, features));
     srcfolder.file('skin.css', css);
+    Object.keys(partials).forEach((template) => {
+        templatefolder.file(`${template}.mustache`, partials[template]);
+    });
     templatefolder.file('skin.mustache', template);
     addi18n(name, rootfolder);
     addphp(name, includesfolder);
