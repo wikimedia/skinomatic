@@ -1,0 +1,132 @@
+{{{html-headelement}}}
+<!-- heading -->
+<div id="mw_header">
+	{{{html-indicators}}}
+	<h1 id="firstHeading" lang="{{lang}}">{{{html-title}}}</h1>
+</div>
+<div id="mw_main">
+	<div id="mw_contentwrapper">
+		<!-- navigation portlet -->
+		<div id="p-cactions" class="portlet" role="navigation">
+			<h3>{{msg-views}}</h3>
+
+			<div class="pBody">
+				<ul>
+				{{#data-namespace-tabs}}
+				{{{html-items}}}
+				{{/data-namespace-tabs}}
+				{{#data-page-actions}}
+				{{{html-items}}}
+				{{/data-page-actions}}
+				{{#data-page-actions-more}}
+				{{{html-items}}}
+				{{/data-page-actions-more}}
+				</ul>
+			</div>
+		</div>
+
+		<!-- content -->
+		<div id="content" role="main">
+			<!-- contentholder does nothing by default, but it allows users to style the text inside
+					the content area without affecting the meaning of 'em' in #mw_content, which is used
+					for the margins -->
+			<div id="mw_contentholder" class="mw-body">
+				<div class='mw-topboxes'>
+					<div class="mw-topbox" id="siteSub">{{msg-tagline}}</div>
+					{{#data-notices}}
+						<div class="usermessage mw-topbox">{{{html-newtalks}}}</div>
+						<div class="mw-topbox" id="siteNotice">{{{html-sitenotice}}}</div>
+					{{/data-notices}}
+				</div>
+
+				<div id="contentSub" lang="{{lang}}" dir="{{dir}}">
+					{{{html-subtitle}}}
+				</div>
+
+				{{#data-undelete}}
+					<div id="contentSub2"><span class="subpages">{{{html}}}</span></div>
+				{{/data-undelete}}
+				<div id="jump-to-nav">{{msg-jumpto}}
+					<a href="#mw_portlets">{{msg-jumptonavigation}}</a>{{msg-comma-separator}}
+					<a href="#searchInput">{{msg-jumptosearch}}</a>
+				</div>
+
+				{{{html-bodycontent}}}
+				<div class='mw_clear'></div>
+				{{#data-catlinks}}{{{html}}}{{/data-catlinks}}
+				{{{html-dataAfterContent}}}
+			</div><!-- mw_contentholder -->
+		</div><!-- mw_content -->
+	</div><!-- mw_contentwrapper -->
+
+	<div id="mw_portlets" lang="{{lang}}" dir="{{dir}}">
+		<h2>{{msg-navigation-heading}}</h2>
+
+		{{#data-sidebar}}
+		{{#data-portals-first}}
+		{{>Portal}}
+		{{/data-portals-first}}
+		{{/data-sidebar}}
+		{{#data-search-box}}
+		<div id="p-search" class="portlet" role="search">
+			<h3><label for="searchInput">{{msg-search}}</label></h3>
+
+			<div id="searchBody" class="pBody">
+				<form action="{{form-action}}" id="searchform">
+					<input type="hidden" name="title" value="{{page-title}}">
+					{{{html-input}}}
+					{{{html-button-search}}}
+					{{{html-button-search-fallback}}}
+					{{^config-UseTwoButtonsSearchForm}}
+					<div><a href="{{href}}" rel="search">{{msg-powersearch-legend}}</a></div>
+					{{/config-UseTwoButtonsSearchForm}}
+				</form>
+			</div>
+		</div>
+		{{/data-search-box}}
+		{{#data-sidebar}}
+		<!-- portlets -->
+		{{#array-portals-rest}}
+		{{>Portal}}
+		{{/array-portals-rest}}
+		{{/data-sidebar}}
+
+	</div><!-- mw_portlets -->
+
+
+</div><!-- main -->
+
+<div class="mw_clear"></div>
+
+<!-- personal portlet -->
+<div class="portlet" id="p-personal" role="navigation">
+	<h3>{{msg-personaltools}}</h3>
+
+	<div class="pBody">
+		<ul>
+			{{#data-personal-menu}}
+			{{{html-items}}}
+			{{/data-personal-menu}}
+		</ul>
+	</div>
+</div>
+
+
+<!-- footer -->
+<div id="footer" class="mw-footer" role="contentinfo" {{{html-userlangattributes}}}>
+	{{#data-footer}}
+	<ul class="footer-info">
+	{{#array-footer-rows}}
+		{{#array-items}}
+		<li id="{{id}}">{{{html}}}</li>
+		{{/array-items}}
+	{{/array-footer-rows}}
+	{{#array-footer-icon-row}}
+		{{#array-items}}
+		<li id="{{id}}">{{{html}}}</li>
+		{{/array-items}}
+	{{/array-footer-icon-row}}
+	</ul>
+	{{/data-footer}}
+</div>
+{{{html-printtail}}}

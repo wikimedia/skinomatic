@@ -1,0 +1,21 @@
+{
+    "name": "Modern",
+    "partials": [
+        "Portal"
+    ],
+    "features": [ "legacy" ],
+    "images": [
+        "audio.png",
+        "discussionitem_icon.gif",
+        "external.png",
+        "footer-grad.png",
+        "lock_icon.gif",
+        "news_icon.png",
+        "bullet.gif",
+        "document.png",
+        "file_icon.gif",
+        "link_icon.gif",
+        "mail_icon.gif",
+        "video.png"
+    ]
+}
