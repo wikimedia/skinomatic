@@ -157,3 +157,38 @@ bottom: 0;
 right: 0;
 }
 
+section {
+    position: relative;
+}
+
+.section__toggle-icon,
+.section__toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+}
+.section__toggle {
+    opacity: 0;
+    z-index: 5;
+}
+
+.section__toggle-icon {
+    border: solid white;
+    border-width: 0 10px 10px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+}
+
+.section__toggle:checked ~ * {
+    display: none;
+}
+
+.section__toggle:checked ~ .section__toggle-icon {
+    display: block;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}

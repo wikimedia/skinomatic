@@ -22,27 +22,15 @@
                     <input type="text" value="SkinomaticSkin" id="skinomatic.title">
                 </section>
                 <section class="skinomatic__builder__section">
-                    <h2>Stylesheets (LESS)</h2>
+                    <h2>Stylesheets</h2>
+                    <div class="section__toggle-icon"></div>
+                    <input type="checkbox" class="section__toggle">
                     <select id="skinomatic.less">
                         <option>styles.css</option>
                     </select>
                     <textarea class="skinomatic__textarea"  id="skinomatic.css"
                         placeholder="Accepts CSS only">
                     </textarea>
-                    <h2>SVGs</h2>
-                    <input type="file" name="img" id="skinomatic.images"
-                        accept=".svg" multiple>
-                    <div id="skinomatic-vue">
-                        <ul class="skinomatic__list">
-                            <li v-for="image in images" class="skinomatic__list__item">
-                                <span class="skinomatic__list__item__image">
-                                    <img v-bind:src="image.src" class="skinomatic__list__item__image__img" />
-                                </span>
-                                <span class="skinomatic__list__item__label">images/{{ image.name }}</span>
-                                <button class="skinomatic__list__item__button" v-on:click="removeImage(image.name)">🗑️</button>
-                            </li>
-                        </ul>
-                    </div>
                     <p>Include any default style packs?</p>
                     <div>
                         <input class="skin__features" checked type="checkbox" value="content" name="skin.features.content">
@@ -56,10 +44,30 @@
                     </div>
                 </section>
                 <section class="skinomatic__builder__section">
+                    <h2>SVGs</h2>
+                    <div class="section__toggle-icon"></div>
+                    <input type="checkbox" class="section__toggle">
+                    <input type="file" name="img" id="skinomatic.images"
+                        accept=".svg" multiple>
+                    <div id="skinomatic-vue">
+                        <ul class="skinomatic__list">
+                            <li v-for="image in images" class="skinomatic__list__item">
+                                <span class="skinomatic__list__item__image">
+                                    <img v-bind:src="image.src" class="skinomatic__list__item__image__img" />
+                                </span>
+                                <span class="skinomatic__list__item__label">images/{{ image.name }}</span>
+                                <button class="skinomatic__list__item__button" v-on:click="removeImage(image.name)">🗑️</button>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+                <section class="skinomatic__builder__section">
+                    <h2>Template</h2>
+                    <div class="section__toggle-icon"></div>
+                    <input type="checkbox" class="section__toggle">
                     <select id="skinomatic.templates">
                         <option>skin.mustache</option>
                     </select>
-                    <h2>Template</h2>
                     <textarea class="skinomatic__textarea" id="skinomatic.mustache"
                         placeholder="Accepts mustache template">
                     </textarea>
