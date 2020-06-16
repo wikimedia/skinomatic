@@ -2,8 +2,7 @@ import JSZip from 'jszip';
 import saveAs from './FileSaver';
 import fs from 'fs';
 
-const SkinMustache = fs.readFileSync(`${__dirname}/../scaffolding/SkinMustache.php`).toString();
-const MustacheTemplate = fs.readFileSync(`${__dirname}/../scaffolding/MustacheTemplate.php`).toString();
+const SkinomaticMustache = fs.readFileSync(`${__dirname}/../scaffolding/SkinomaticMustache.php`).toString();
 
 function stringifyjson(json) {
     return JSON.stringify(json, null, 2);
@@ -26,20 +25,19 @@ function addi18n(name, rootfolder) {
 
 function addphp(name, includesfolder) {
     const IMPORTS = `<?php
-namespace Skin${name};
-use SkinTemplate;
-use MwException;
-use BaseTemplate;
-use Profiler;
-use TemplateParser;
-use Linker;
+
+/** DONOT EDIT THIS FILE UNDER ANY CIRCUMSTANCES */
+namespace ${name};
+use SkinMustache;
+use ResourceLoaderSkinModule;
+use SpecialPage;
+use Skin;
 use Hooks;
+use Linker;
 use Html;
 use Xml;
-use Skin;
 `;
-    includesfolder.file(`SkinMustache.php`, SkinMustache.replace('<?php', IMPORTS) );
-    includesfolder.file(`MustacheTemplate.php`, MustacheTemplate.replace('<?php', IMPORTS) );
+    includesfolder.file(`SkinomaticMustache.php`, SkinomaticMustache.replace('<?php', IMPORTS));
 }
 
 function skinjson(name, features) {
@@ -50,12 +48,25 @@ function skinjson(name, features) {
             name,
             namemsg: `skinname-${skinKey}`,
             descriptionmsg: `${skinKey}-skin-desc`,
-            url: `https://www.mediawiki.org/wiki/Skin:${name}   `,
+            url: `https://www.mediawiki.org/wiki/Skin:${name}`,
             author: [ 'Skinomatic' ],
             type: 'skin',
+            requires: {
+                // Require updates every release
+                MediaWiki: '>= 1.35.0, <= 1.35.0'
+            },
             'manifest_version': 2,
             ValidSkinNames: {
-                [skinKey]: `${name}\\SkinMustache`
+                [skinKey]: {
+                    "class": `${name}\\SkinomaticMustache`,
+                    "args": [
+                        {
+                            "styles": `skins.${skinKey}`,
+                            "name": name,
+                            "templateDirectory": `skins/${name}/templates/`
+                        }
+                    ]
+                }
             },
             MessagesDirs: {
                 [name]: [ 'i18n']
@@ -65,7 +76,7 @@ function skinjson(name, features) {
                 remoteSkinPath: name
             },
             AutoloadNamespaces: {
-                [`Skin${name}\\`]: 'includes/'
+                [`${name}\\`]: 'includes/'
             },
             ResourceModules: {
                 [`skins.${skinKey}`]: {
@@ -96,7 +107,7 @@ function build(name, template, css, features, images) {
     const includesfolder = rootfolder.folder('includes');
     rootfolder.file('skin.json', skinjson(name, features))
     srcfolder.file('skin.css', css);
-    templatefolder.file(`${name.toLowerCase()}.mustache`, template);
+    templatefolder.file('skin.mustache', template);
     addi18n(name, rootfolder);
     addphp(name, includesfolder);
     images.forEach((image) => {
