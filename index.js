@@ -367,7 +367,7 @@ function loadSkin(name) {
                 ) ] );
             }),
         fetch(`${root}/skin.mustache`).then((r) => r.text()),
-        fetch(`${root}/styles.css`).then((r) => r.text())
+        fetch(`${root}/skin.css`).then((r) => r.text())
     ] ).then((res) => {
         const assets = res[0];
         defaultImages = assets[0];
