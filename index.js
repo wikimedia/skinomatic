@@ -2,6 +2,7 @@ import fs from 'fs';
 import mustache from 'mustache';
 import build from './src/build';
 
+const NAME_ID = 'skinomatic.title';
 const IMAGES_ID = 'skinomatic.images';
 const MUSTACHE_ID = 'skinomatic.mustache';
 const CSS_ID = 'skinomatic.css';
@@ -26,6 +27,7 @@ const SKIN_FEATURES = {
 let defaultTemplate = '';
 let defaultCSS = '';
 let defaultImages = [];
+let localSkinOption;
 
 const getSVGDataURI = (text) => `data:image/svg+xml;utf8,${encodeURIComponent(text)}`;
 
@@ -100,6 +102,7 @@ function saveLocally() {
     localStorage.setItem(MUSTACHE_ID,  document.getElementById(MUSTACHE_ID).value);
     localStorage.setItem(CSS_ID, document.getElementById(CSS_ID).value);
     localStorage.setItem(IMAGES_ID, JSON.stringify(localImages));
+    localStorage.setItem(NAME_ID, document.getElementById(NAME_ID).value);
 }
 
 function preview() {
@@ -256,20 +259,35 @@ function saveLocallyAndPreview() {
     preview();
 }
 
+function getLocalName() {
+    return localStorage.getItem(NAME_ID)
+        || 'SkinomaticSkin';
+}
+
+function loadLocalSkin() {
+    if(!localStorage.getItem(IMAGES_ID)) {
+        resetImages();
+    }
+    const localData = [
+        localStorage.getItem(MUSTACHE_ID),
+        localStorage.getItem(CSS_ID)
+    ];
+    if (localData[0]) {
+        setmustache(localData[0]);
+        setcssWithImgSubstitutions(localData[1]);
+        document.getElementById(NAME_ID).value = getLocalName();
+    }
+    preview();
+    return Promise.resolve();
+}
+
 function init() {
     const mustacheInput = document.getElementById(MUSTACHE_ID);
     const cssInput =  document.getElementById(CSS_ID);
     const contentSelector = document.getElementById(CONTENT_SOURCE_ID);
     const loggedin = document.getElementById('skinomatic.loggedin');
     const imagesInput = document.getElementById(IMAGES_ID);
-    if(!localStorage.getItem(IMAGES_ID)) {
-        resetImages();
-    }
-    const localData = [localStorage.getItem(MUSTACHE_ID), localStorage.getItem(CSS_ID)];
-    if (localData[0]) {
-        setmustache(localData[0]);
-        setcssWithImgSubstitutions(localData[1]);
-    }
+    const nameInput = document.getElementById(NAME_ID);
 
     // set up event listeners
     cssInput.addEventListener('input', debounce(saveLocallyAndPreview));
@@ -277,6 +295,16 @@ function init() {
     contentSelector.addEventListener('change', function (ev) {
         setContentAndPreview(this.value);
     });
+    nameInput.addEventListener('input',
+        debounce( function () {
+            if (!this.value) {
+                this.value = 'Skinomatic';
+            }
+            this.value = this.value.replace(/ /, '_');
+            localSkinOption.textContent = this.value;
+            saveLocally();
+        } )
+    );
     loggedin.addEventListener('change', function () {
         setLoginData(loggedin.checked);
         preview();
@@ -294,7 +322,7 @@ function init() {
     setLoginData(loggedin.checked);
     setContentAndPreview(contentSelector.value);
     document.getElementById('skinomatic.build').addEventListener('click', function () {
-        const name = document.getElementById('skinomatic.title').value;
+        const name = document.getElementById(NAME_ID).value;
         const uppercaseName = name.charAt(0).toUpperCase() + name.substr(1);
         build(uppercaseName,
             `{{{html-headelement}}}${mustacheInput.value}{{{html-printtail}}}`,
@@ -336,18 +364,21 @@ function init() {
 }
 
 function loadSkin(name) {
+    if (name === 'local') {
+        return loadLocalSkin();
+    }
     const root = getThemeDirectory(name);
     return Promise.all( [
         fetch(`${root}/index.json`).then(
             (r) => r.json(),
             () => {
-                console.log('a');
                 return Promise.resolve({
                     images: []
                 })
             }
         )
             .then((r) => {
+                document.getElementById(NAME_ID).value = r.name || name;
                 return Promise.all(
                     (r && r.images || []).map((name) => {
                         return fetch(`${root}/images/${name}`).then((r) => r.text())
@@ -373,19 +404,32 @@ function loadSkin(name) {
     });
 }
 
+function addOption(select, text, value) {
+    const o = document.createElement('option');
+    o.value = value;
+    o.textContent = text;
+    select.append(o);
+    return o;
+}
+
 fetch('/themes/index.json').then((r) => r.json())
     .then(( skins ) => {
         const select = document.createElement('select');
+        localSkinOption = addOption(select, getLocalName(), 'local');
         skins.forEach((s) => {
-            const o = document.createElement('option');
-            o.value = s;
-            o.textContent = s;
-            select.append(o);
+            addOption(select, s, s)
         });
-        loadSkin(skins[0]).then(init);
         select.addEventListener('change', function () {
             loadSkin(this.value);
+            localStorage.setItem('skin', this.value);
         });
+        const localSkin = localStorage.getItem('skin');
+        if ( localSkin ) {
+            select.value = localSkin;
+            loadSkin(localSkin).then(init);
+        } else {
+            loadSkin(skins[0]).then(init);
+        }
         document.querySelector('.skinomatic__buttons').prepend( select );
     })
 
