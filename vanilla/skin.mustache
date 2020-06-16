@@ -1,0 +1,62 @@
+{{#data-search-box}}
+<form action="{{form-action}}" id="{{form-id}}">
+    {{{html-input}}}
+    <input type="hidden" name="title" value="{{page-title}}">
+    {{{html-button-search}}}
+</form>
+{{/data-search-box}}
+<div id="siteNotice" class="mw-body-content">{{{html-sitenotice}}}</div>
+{{#data-indicators}}
+<span id="{{id}}" class="{{class}}">{{{html}}}</span>
+{{/data-indicators}}
+<h1 id="firstHeading" class="firstHeading" lang="{{page-langcode}}">{{{html-title}}}</h1>
+<article>
+    {{#page-isarticle}}<div id="siteSub" class="noprint">{{msg-tagline}}</div>{{/page-isarticle}}
+    <div id="contentSub"{{{html-userlangattributes}}}>{{{html-subtitle}}}</div>
+    {{#html-undelete}}<div id="contentSub2">{{{html-undelete}}}</div>{{/html-undelete}}
+    {{#html-newtalk}}<div class="usermessage">{{{html-newtalk}}}</div>{{/html-newtalk}}
+    {{{html-bodycontent}}}
+    {{#html-printfooter}}
+    <div>{{{html-printfooter}}}</div>
+    {{/html-printfooter}}
+    {{{html-catlinks}}}
+    <div class="visualClear"></div>
+    {{{html-debuglog}}}
+</article>
+{{{html-dataAfterContent}}}
+<aside>
+    {{#data-page-actions}}
+    <nav><h3>{{label}}</h3>
+    <ul class="{{list-classes}}">{{{html-items}}}</ul>
+    </nav>
+    {{/data-page-actions}}
+    {{#data-page-actions-more}}
+    <nav><h3>{{label}}</h3><ul class="{{list-classes}}">{{{html-items}}}</ul></nav>
+    {{/data-page-actions-more}}
+    {{#data-personal-menu}}
+    <nav><h3>{{label}}</h3><ul class="{{list-classes}}">{{{html-items}}}</ul></nav>
+    {{/data-personal-menu}}
+    {{#data-namespace-tabs}}
+    <nav><h3>{{label}}</h3><ul class="{{list-classes}}">{{{html-items}}}</ul></nav>
+    {{/data-namespace-tabs}}
+    {{#data-variants}}
+    <nav><h3>{{label}}</h3><ul class="{{list-classes}}">{{{html-items}}}</ul></nav>
+    {{/data-variants}}
+    {{#data-sidebar}}
+    {{#data-portals-first}}
+    <nav><h3>{{label}}</h3><ul class="{{list-classes}}">{{{html-items}}}</ul></nav>
+    {{/data-portals-first}}
+    {{#array-portals-rest}}
+    <nav><h3>{{label}}</h3><ul class="{{list-classes}}">{{{html-items}}}</ul></nav>
+    {{/array-portals-rest}}
+    {{/data-sidebar}}
+</aside>
+<footer {{{html-userlangattributes}}}>
+	{{#array-footer-rows}}
+	<ul id="{{id}}" class="{{className}}">
+		{{#array-items}}
+		<li id="{{id}}">{{{html}}}</li>
+		{{/array-items}}
+	</ul>
+	{{/array-footer-rows}}
+</footer>

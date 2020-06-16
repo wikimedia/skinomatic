@@ -19,6 +19,7 @@ import build from './src/build';
 import templateData from './templateData.json';
 import templateDataLoggedIn from './templateDataLoggedIn.json';
 
+const CSS_CHOOSER = 'skinomatic.less';
 const NAME_ID = 'skinomatic.title';
 const IMAGES_ID = 'skinomatic.images';
 const MUSTACHE_ID = 'skinomatic.mustache';
@@ -41,6 +42,10 @@ const SKIN_FEATURES = {
 
 let isLoggedIn = false;
 let currentSkin = {};
+const VANILLA_SKIN = {
+    template: fs.readFileSync(`${__dirname}/vanilla/skin.mustache`).toString(),
+    css: fs.readFileSync(`${__dirname}/vanilla/skin.css`).toString()
+};
 let defaultTemplate = '';
 let defaultCSS = '';
 let defaultImages = [];
@@ -234,8 +239,8 @@ function loadLocalSkin() {
         resetImages();
     }
     const localData = [
-        localStorage.getItem(MUSTACHE_ID),
-        localStorage.getItem(CSS_ID)
+        localStorage.getItem(MUSTACHE_ID) || VANILLA_SKIN.template,
+        localStorage.getItem(CSS_ID) || VANILLA_SKIN.css
     ];
     if (localData[0]) {
         setmustache(localData[0]);
@@ -328,8 +333,28 @@ function init() {
       })
 }
 
+function setreadonly(isreadonly) {
+    [
+        NAME_ID,
+        IMAGES_ID,
+        MUSTACHE_ID,
+        TEMPLATE_CHOOSER_ID,
+        CSS_CHOOSER
+    ].map(id => document.getElementById(id)).forEach((node) => {
+        if ( isreadonly ) {
+            node.setAttribute('disabled', true );
+            node.setAttribute('readonly', isreadonly);
+        } else {
+            node.removeAttribute('disabled');
+            node.removeAttribute('readonly');
+        }
+    });
+}
+
 function loadSkin(name) {
+    setreadonly(true);
     if (name === 'local') {
+        setreadonly(false);
         return loadLocalSkin();
     }
     const root = getThemeDirectory(name);
@@ -414,7 +439,7 @@ fetch('/themes/index.json').then((r) => r.json())
             select.value = localSkin;
             loadSkin(localSkin).then(init);
         } else {
-            loadSkin(skins[0]).then(init);
+            loadLocalSkin().then(init);
         }
         document.querySelector('.skinomatic__buttons').prepend( select );
     })

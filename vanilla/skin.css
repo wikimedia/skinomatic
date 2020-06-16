@@ -1,0 +1,23 @@
+body {
+    background: #FF304F;
+    color: white;
+}
+a {
+    font-weight: bold;
+    color: white;
+}
+aside {
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+}
+nav {
+    width: 30%;
+    height: 200px;
+    overflow: scroll;
+}
+nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
