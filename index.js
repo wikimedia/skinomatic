@@ -2,6 +2,23 @@ import fs from 'fs';
 import mustache from 'mustache';
 import build from './src/build';
 
+/**
+ * // Result of running
+ * console.log(
+	JSON.stringify(
+		Object.assign(
+			{},
+			LEGACY_TEMPLATE_DATA,
+			NAVIGATION_TEMPLATE_DATA.loggedOutWithVariants
+		),
+		null,
+		2)
+	);
+ *in Vector storybook instance.
+ */
+import templateData from './templateData.json';
+import templateDataLoggedIn from './templateDataLoggedIn.json';
+
 const NAME_ID = 'skinomatic.title';
 const IMAGES_ID = 'skinomatic.images';
 const MUSTACHE_ID = 'skinomatic.mustache';
@@ -10,13 +27,9 @@ const CSS_ID = 'skinomatic.css';
 const RESET_ID = 'skinomatic.reset';
 const CONTENT_SOURCE_ID = 'skinomatic.content';
 
-import { HTML_INDICATORS, htmluserlangattributes, placeholder,
-    htmllogoattributes, htmlloggedin,
-    htmlpersonaltoolsloggedin, htmlpersonaltools,
+import { placeholder,
     IPSUM_LOREM,
-    portals, datasearch, FOOTER_ROWS, FOOTER_ICONS,
-    htmlviews, htmlnamespaces, htmlvariants,
-    printtail, headelement, datamore } from './src/common';
+    printtail, headelement } from './src/common';
 
 const SKIN_FEATURES = {
     elements: fs.readFileSync(`${__dirname}/skin-module-features/elements.css`).toString(),
@@ -25,10 +38,15 @@ const SKIN_FEATURES = {
     interface: fs.readFileSync(`${__dirname}/skin-module-features/interface.css`).toString()
 };
 
+let isLoggedIn = false;
 let currentSkin = {};
 let defaultTemplate = '';
 let defaultCSS = '';
 let defaultImages = [];
+let currentContent = {
+    'html-title': 'New Skinomatic skin',
+    'html-bodycontent': placeholder( 'Article content goes here' )
+};
 let localSkinOption;
 
 const getSVGDataURI = (text) => `data:image/svg+xml;utf8,${encodeURIComponent(text)}`;
@@ -38,16 +56,6 @@ function getThemeDirectory( skinName ) {
 }
 
 const localImages = JSON.parse(localStorage.getItem(IMAGES_ID) || '[]');
-
-let localData = {
-    'html-title': 'New Skinomatic skin',
-    'html-bodycontent': placeholder( 'Article content goes here' ),
-    'data-personal-menu': {
-        'label': 'Personal tools',
-        'html-loggedin': htmlloggedin,
-        'html-personal-tools': htmlpersonaltools
-    },
-};
 
 const articlecache = JSON.parse( localStorage.getItem( 'skinomatic.articlecache' ) || '{}' );
 
@@ -129,67 +137,20 @@ function preview() {
 
     doc.open('/loading.html');
     doc.writeln(
-        mustache.render(`{{{html-headelement}}}${template}{{{html-printtail}}}`, Object.assign( localData, {
-            'html-headelement': headelement(css, [
-                'site.styles',
-                'mediawiki.legacy.shared'
-            ] ),
-            'html-printtail': printtail(),
-            'page-isarticle': true,
-            'msg-tagline': 'From Wikipedia, the free encyclopedia',
-            'html-userlangattributes': htmluserlangattributes,
-            'msg-jumptonavigation': 'Jump to navigation',
-            'msg-jumptosearch': 'Jump to search',
-            'data-page-actions': {
-                'id': 'p-views',
-                'empty-portlet': '',
-                'label-id': 'p-views-label',
-                'msg-label': 'Views',
-                'html-items': htmlviews
-            },        
-            'data-namespaces': {
-                'id': 'p-namespaces',
-                'empty-portlet': '',
-                'label-id': 'p-namespaces-label',
-                'label': 'Namespaces',
-                'html-items': htmlnamespaces
-            },
-            'data-page-actions-more': datamore,
-            'data-variants': {
-                'id': 'p-variants',
-                'msg-label': '新加坡简体',
-                'label-id': 'p-variants-label',
-                'html-items': htmlvariants
-            },
-            'data-views': {
-                'id': 'p-views',
-                'empty-portlet': '',
-                'label-id': 'p-views-label',
-                'label': 'Views',
-                'html-items': htmlviews
-            },
-            'data-search-box': datasearch,
-            'data-sidebar': {
-                'array-portals-rest': portals
-            },
-            'html-navigation-heading': 'Navigation menu',
-            'html-logo-attributes': htmllogoattributes,
-    
-            // site specific
-            'data-footer-links': FOOTER_ROWS,
-            'data-footer-icons': FOOTER_ICONS,
-            'html-sitenotice': placeholder( 'a site notice or central notice banner may go here', 70 ),
-            'html-printfooter': `Retrieved from ‘<a dir="ltr" href="#">#?title=this&oldid=blah</a>’`,
-            'html-catlinks': placeholder( 'Category links component from mediawiki core', 50 ),
-
-            // messages
-            'msg-search': 'Search',
-
-            // extension dependent..
-            'html-dataAfterContent': placeholder( 'Extensions can add here e.g. Related Articles.', 100 ),
-            'html-indicators': HTML_INDICATORS,
-            'html-subtitle': placeholder( 'Extensions can configure subtitle', 20 )
-        } ), currentSkin.partials )
+        mustache.render(`{{{html-headelement}}}${template}{{{html-printtail}}}`,
+            Object.assign(
+                {},
+                templateData,
+                isLoggedIn ? templateDataLoggedIn : {},
+                currentContent, {
+                'html-headelement': headelement(css, [
+                    'site.styles',
+                    'mediawiki.legacy.shared'
+                ] ),
+                'html-printtail': printtail(),
+            } ),
+            currentSkin.partials
+        )
     );
     doc.close();
 }
@@ -207,37 +168,32 @@ function setContentAndPreview(type) {
         case '4':
             return getarticlehtml('Salvador_Dalí')
                 .then((html) => {
-                    localData['html-title'] = 'Salvador Dalí';
-                    localData['html-bodycontent'] = html;
+                    currentContent['html-title'] = 'Salvador Dalí';
+                    currentContent['html-bodycontent'] = html;
                     preview();
                 });
         case '3':
             return getarticlehtml('Akira_Kurosawa')
                 .then((html) => {
-                    localData['html-title'] = 'Akira Kurosawa';
-                    localData['html-bodycontent'] = html;
+                    currentContent['html-title'] = 'Akira Kurosawa';
+                    currentContent['html-bodycontent'] = html;
                     preview();
                 });
         case '2':
-            localData['html-title'] = 'Ipsum Lorem';
-            localData['html-bodycontent'] = IPSUM_LOREM;
+            currentContent['html-title'] = 'Ipsum Lorem';
+            currentContent['html-bodycontent'] = IPSUM_LOREM;
             break;
         default:
-            localData['html-title'] = 'Title';
-            localData['html-bodycontent'] = placeholder( 'Article content goes here' );
+            currentContent['html-title'] = 'Title';
+            currentContent  ['html-bodycontent'] = placeholder( 'Article content goes here' );
             break;
     }
     preview();
 }
 
 function setLoginData(checked) {
-    if (checked) {
-        localData['data-personal-menu']['html-items'] = htmlpersonaltoolsloggedin;
-        localData['data-personal-menu']['html-loggedin'] = '';
-    } else {
-        localData['data-personal-menu']['html-items'] = htmlpersonaltools;
-        localData['data-personal-menu']['html-loggedin'] = htmlloggedin;
-    }
+    isLoggedIn = checked;
+    preview();
 }
 
 function resetImages() {
