@@ -2,6 +2,16 @@
     box-sizing: border-box;
 }
 
+.mode--build,
+.mode--find {
+    display: none;
+}
+
+.mode--build--active .mode--build,
+.mode--find--active .mode--find {
+    display: initial;
+}
+
 html {
     background: #1d1e1d;
 }
@@ -110,6 +120,11 @@ h1 img {
 .skinomatic__preview {
     grid-area: content;
     position: relative;
+}
+
+.mode--find--active .skinomatic__preview {
+    grid-column-start: sidebar-start;
+    grid-column-end: content-end;
 }
 
 .skinomatic__header {

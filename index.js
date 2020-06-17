@@ -27,6 +27,10 @@ const TEMPLATE_CHOOSER_ID = 'skinomatic.templates';
 const CSS_ID = 'skinomatic.css';
 const RESET_ID = 'skinomatic.reset';
 const CONTENT_SOURCE_ID = 'skinomatic.content';
+const VIEW_SOURCE_ID = 'skinomatic.viewsource';
+
+const CLASS_MODE_FIND = 'mode--find--active';
+const CLASS_MODE_VIEWSOURCE = 'mode--build--active';
 
 import { placeholder,
     IPSUM_LOREM,
@@ -256,6 +260,13 @@ function loadLocalSkin() {
     return Promise.resolve();
 }
 
+function setModeClass(checked) {
+    const b = document.body;
+    b.classList.remove(CLASS_MODE_FIND);
+    b.classList.remove(CLASS_MODE_VIEWSOURCE);
+    b.classList.add(checked ? CLASS_MODE_VIEWSOURCE : CLASS_MODE_FIND);
+}
+
 function init() {
     const mustacheInput = document.getElementById(MUSTACHE_ID);
     const cssInput =  document.getElementById(CSS_ID);
@@ -265,6 +276,11 @@ function init() {
     const nameInput = document.getElementById(NAME_ID);
 
     // set up event listeners
+    const modeToggle = document.getElementById(VIEW_SOURCE_ID);
+    modeToggle.addEventListener('change', function () {
+        setModeClass(this.checked);
+    });
+    setModeClass(modeToggle.checked);
     cssInput.addEventListener('input', debounce(saveLocallyAndPreview));
     mustacheInput.addEventListener('input', debounce(saveLocallyAndPreview));
     contentSelector.addEventListener('change', function (ev) {
