@@ -40,7 +40,7 @@ use Xml;
     includesfolder.file(`SkinomaticMustache.php`, SkinomaticMustache.replace('<?php', IMPORTS));
 }
 
-function skinjson(name, features) {
+function skinjson(name, features, styles) {
     const skinKey = name.toLowerCase();
 
     return stringifyjson(
@@ -82,9 +82,9 @@ function skinjson(name, features) {
                 [`skins.${skinKey}`]: {
                     class: "ResourceLoaderSkinModule",
                     features,
-                    styles: [
+                    styles: styles.concat([
                         "src/skin.css"
-                    ]
+                    ])
                 }
             }
         }
@@ -97,18 +97,35 @@ function skinjson(name, features) {
  * @param {string} template 
  * @param {string} css 
  * @param {array} features
- * @param {Object} partials where key is the name of the template minus
+ * @param {Object} skinDefinition
+ * @param {Object} skinDefinition.partials key is the name of the template minus
  * the mustache suffix and the text is its content
+ * @param {Object} skinDefinition.styles key is the name of the stylesheet
+ *  and the text is its content
  */
-function build(name, template, css, features, images, partials) {
+function build(name, template, css, features, images, skinDefinition) {
+    const partials = skinDefinition.partials || {};
+    const styles = skinDefinition.styles || {};
     const zip = new JSZip();
     const rootfolder = zip.folder(name);
     const srcfolder = rootfolder.folder('src');
     const templatefolder = rootfolder.folder('templates');
     const imagesfolder = srcfolder.folder('images');
     const includesfolder = rootfolder.folder('includes');
-    rootfolder.file('skin.json', skinjson(name, features));
+    rootfolder.file('skin.json',
+        skinjson(
+            name, features,
+            // only `css` files need to be listed in manifest
+            // not LESS.
+            Object.keys(styles).filter((name) => name.indexOf('.css') > -1)
+                // its in the src folder.
+                .map((name) => `src/${name}`)
+        )
+    );
     srcfolder.file('skin.css', css);
+    Object.keys(styles).forEach((stylesheet) => {
+        srcfolder.file(stylesheet, styles[stylesheet]);
+    });
     Object.keys(partials).forEach((template) => {
         templatefolder.file(`${template}.mustache`, partials[template]);
     });

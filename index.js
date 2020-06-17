@@ -81,6 +81,11 @@ function getarticlehtml(title) {
 
 function setcss(value) {
     document.getElementById(CSS_ID).value = value;
+    const select = document.getElementById(CSS_CHOOSER);
+    // will be editable later.
+    select.disabled = true;
+    Object.keys(currentSkin.styles || {}).forEach((key) =>
+        addOption(select, key, key));
 }
 
 function setmustache(value) {
@@ -296,7 +301,7 @@ function init() {
         const uppercaseName = name.charAt(0).toUpperCase() + name.substr(1);
         build(uppercaseName,
             `{{{html-headelement}}}${mustacheInput.value}{{{html-printtail}}}`,
-            cssInput.value, getfeaturenames(), localImages, currentSkin.partials)
+            cssInput.value, getfeaturenames(), localImages, currentSkin)
     });
     imagesInput.addEventListener('change', function () {
         const p = [];
@@ -384,10 +389,22 @@ function loadSkin(name) {
                                     text: getSVGDataURI(text)
                                 };
                             });
-                    })
-                ), Promise.all(
+                    }),
+                ),
+                Promise.all(
                     (r && r.partials || []).map((name) => {
                         return fetch(`${root}/${name}.mustache`).then((r) => r.text())
+                            .then((text) => {
+                                return {
+                                    name,
+                                    text
+                                };
+                            });
+                    })
+                ),
+                Promise.all(
+                    (r && r.styles || []).map((name) => {
+                        return fetch(`${root}/${name}`).then((r) => r.text())
                             .then((text) => {
                                 return {
                                     name,
@@ -403,9 +420,14 @@ function loadSkin(name) {
         const assets = res[0];
         defaultImages = assets[0];
         const partials = {};
+        const styles = {};
         assets[1].forEach((p) => {
             partials[p.name] = p.text;
         });
+        assets[2].forEach((p) => {
+            styles[p.name] = p.text;
+        });
+        currentSkin.styles = styles;
         currentSkin.partials = partials;
         defaultTemplate = res[1];
         defaultCSS = res[2];
