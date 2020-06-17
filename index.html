@@ -13,7 +13,6 @@
                 <p><span class="mode--build">Build </span><span class="mode--find">Find </span>yourself a MediaWiki skin!</p>
                 <div class="skinomatic__buttons">
                     <input type="checkbox" id="skinomatic.viewsource" value="1" /> View source
-                    <button class="skinomatic__buttons__button" id="skinomatic.build">Download Skin!</button>
                 </div>
             </header>
             <div class="skinomatic__builder mode--build">
@@ -77,22 +76,20 @@
                 <button class="skinomatic__buttons__button mode--build" id="skinomatic.reset">Reset</button>
             </div>
             <div class="skinomatic__preview">
-
-                <section class="skinomatic__builder__section">
-                    <h2>Content</h2>
-                    <select id="skinomatic.content">
-                        <option value="1">Placeholder</option>
-                        <option value="2">Ipsum Lorem</option>
-                        <option value="3">Akira Kurosawa</option>
-                        <option value="4">Salvador Dalí</option>
-                    </select>
-                    <input type="checkbox" id="skinomatic.loggedin" value="1" /> Logged in?
-                </section>
                 <h2>Preview</h2>
                 <iframe src="loading.html"
                     id="skinomatic__preview__iframe" class="skinomatic__preview__iframe"></iframe>
             </div>
-            <footer class="skinomatic__footer">
+            <footer>
+                <label for="skinomatic.content">Content</label>
+                <select id="skinomatic.content">
+                    <option value="1">Placeholder</option>
+                    <option value="2">Ipsum Lorem</option>
+                    <option value="3">Akira Kurosawa</option>
+                    <option value="4">Salvador Dalí</option>
+                </select>
+                <input type="checkbox" id="skinomatic.loggedin" value="1" /> Logged in?
+                <button class="skinomatic__buttons__button" id="skinomatic.build">Download Skin!</button>
             </footer>
             <!-- development version, includes helpful console warnings -->
             <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>

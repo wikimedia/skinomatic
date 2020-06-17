@@ -131,8 +131,13 @@ h1 img {
     grid-area: header;
 }
 
-.footer {
-    grid-area: footer;
+footer {
+    position: fixed;
+    bottom: 0;
+    background: black;
+    width: 100%;
+    text-align: right;
+    padding: 20px;
 }
 
 .box {
@@ -141,11 +146,6 @@ h1 img {
     border-radius: 5px;
     padding: 50px;
     font-size: 150%;
-}
-
-.header,
-.footer {
-background-color: #999;
 }
 
 .topleft {
