@@ -3,19 +3,24 @@
     "partials": [
         "Portal"
     ],
-    "features": [ "legacy" ],
+    "features": [
+        "legacy"
+    ],
     "images": [
         "audio.png",
-        "discussionitem_icon.gif",
-        "external.png",
-        "footer-grad.png",
-        "lock_icon.gif",
-        "news_icon.png",
         "bullet.gif",
+        "discussionitem_icon.gif",
         "document.png",
+        "external.png",
         "file_icon.gif",
+        "footer-grad.png",
         "link_icon.gif",
+        "lock_icon.gif",
         "mail_icon.gif",
+        "news_icon.png",
         "video.png"
+    ],
+    "styles": [
+        "print.css"
     ]
 }
