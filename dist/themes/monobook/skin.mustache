@@ -1,0 +1,150 @@
+<div id="globalWrapper">
+	<div id="column-content">
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			{{#html-sitenotice}}
+			<div id="siteNotice"
+				class="mw-body-content">{{{html-sitenotice}}}</div>
+			{{/html-sitenotice}}
+			<div class="mw-indicators mw-body-content">
+				{{#data-indicators}}
+				<div class="{{id}}">{{{html}}}</div>
+				{{/data-indicators}}
+			</div>
+			<h1 id="firstHeading" class="firstHeading"
+				{{{html-userlangattributes}}}>{{{html-title}}}</h1>
+			<div id="bodyContent" class="mw-body-content">
+				<!-- start content -->
+				<div id="siteSub">{{ msg-tagline }}</div>
+				<div id="contentSub" {{{html-userlangattributes}}}>
+				{{{html-subtitle}}}
+				</div>
+				{{#html-undelete}}
+				<div id="contentSub2">{{{html-undelete}}}</div>
+				{{/html-undelete}}
+				{{#html-newtalk}}
+				<div class="usermessage">{{{html-newtalk}}}</div>
+				{{/html-newtalk}}
+				<div id="jump-to-nav"></div>
+				<a href="#column-one" class="mw-jump-link">
+					{{msg-monobook-jumptonavigation}}
+				</a>
+				<a href="#searchInput" class="mw-jump-link">
+					{{msg-monobook-jumptosearch}}
+				</a>
+				{{{html-catlinks}}}
+				{{{html-bodycontent}}}
+				<div class="visualClear"></div>
+			</div>
+		</div>
+		{{{html-hooks}}}{{!todo}}
+		{{{html-dataAfterContent}}}
+		<div class="visualClear"></div>
+	</div>
+	<div id="column-one" {{{html-userlangattributes}}}>
+		<h2>{{msg-navigation-heading}}</h2>
+		<div role="navigation" class="portlet" id="p-cactions" aria-labelledby="p-cactions-label">
+			<h3 id="p-cactions-label" {{{html-userlangattributes}}}>{{msg-monobook-cactions-label}}</h3>
+			<div class="pBody">
+				<ul {{{html-userlangattributes}}}>
+				{{! comments used to avoid additional whitespace}}
+				{{#data-namespace-tabs}}{{{html-items}}}{{/data-namespace-tabs}}{{! 
+				}}{{#data-page-actions}}{{{html-items}}}{{/data-page-actions}}{{! 
+				}}{{#data-page-actions-more}}{{{html-items}}}{{/data-page-actions-more}}
+				</ul>
+			</div>
+		</div>
+		<div role="navigation" class="portlet" id="p-cactions-mobile" aria-labelledby="p-cactions-mobile-label">
+			<h3 id="p-cactions-mobile-label" {{{html-userlangattributes}}}>
+			{{msg-monobook-cactions-label}}
+			</h3>
+			<div class="pBody">
+				<ul {{{html-userlangattributes}}}>
+					{{! TODO: data-namespace-tabs with modifications - use a sub class?}}
+					<li id="ca-nstab-main-mobile" class="selected">
+						{{#data-sidebar}}
+						<a href="{{main-page-href}}">@todo Main page</a>
+						{{/data-sidebar}}
+					</li>
+					<li id="ca-talk-mobile">
+						<a href="/wiki/Talk:Main_Page" rel="discussion" title="Talk">Talk</a
+					</li>
+					<li id="ca-more">
+						<a href="#p-cactions">More</a>
+					</li>
+					<li id="ca-tools">
+						<a href="#p-tb" title="Tools">Tools</a>
+					</li>
+					<li id="ca-languages">
+						<a href="#p-lang" title="Languages">Languages</a>
+					</li>
+					-->
+				</ul>
+			</div>
+		</div>
+		{{#data-personal-menu}}
+		<div role="navigation" class="portlet" id="{{id}}" aria-labelledby="{{label-id}}">
+			<h3 id="{{label-id}}" {{{html-userlangattributes}}}>{{label}}</h3>
+			<div class="pBody">
+				<ul {{{html-userlangattributes}}} style="margin-right: initial;">
+				{{{html-items}}}
+				</ul>
+			</div>
+		</div>
+		{{/data-personal-menu}}
+		<div class="portlet" id="p-logo" role="banner">
+			{{#data-sidebar}}<a class="mw-wiki-logo" {{{html-logo-attributes}}}></a>{{/data-sidebar}}
+		</div>
+		<div id="sidebar">
+		{{#data-sidebar}}
+		{{#data-portals-first}}
+		{{>Portlet}}
+		{{/data-portals-first}}
+		{{#data-search-box}}
+		<div role="search" class="portlet" id="p-search">
+			<h3 id="p-search-label" dir="ltr" lang="en-GB">
+				<label for="searchInput">{{msg-search}}</label>
+			</h3>
+			<div class="pBody" id="searchBody">
+				<form action="{{form-action}}" id="searchform">
+					<input type="hidden" value="{{page-title}}" name="title">
+					{{{html-input}}}
+					{{{html-button-search}}}&nbsp; {{{html-button-search-fallback}}}
+				</form>
+			</div>
+		</div>
+		{{/data-search-box}}
+		{{#array-portals-rest}}
+		{{>Portlet}}
+		{{/array-portals-rest}}
+		{{/data-sidebar}}
+		</div>
+		<a href="#sidebar" title="{{msg-jumptonavigation}}"
+			class="menu-toggle" id="sidebar-toggle"></a>
+		<a href="#p-personal" title="{{msg-monobook-jumptopersonal}}"
+			class="menu-toggle" id="p-personal-toggle"></a>
+		<a href="#globalWrapper" title="{{msg-monobook-jumptotop}}"
+			class="menu-toggle" id="globalWrapper-toggle"></a>
+	</div>
+	<!-- end of the left (by default at least) column -->
+	<div class="visualClear"></div>
+	<div id="footer" class="mw-footer" role="contentinfo"
+		{{{html-userlangattributes}}}>
+	{{#data-footer}}
+		{{#array-footer-icon-row}}
+		{{#array-items}}
+		<div id="f-{{name}}ico" class="footer-icons">
+			{{{html}}}
+		</div>
+		{{/array-items}}
+		{{/array-footer-icon-row}}
+		<ul id="f-list">
+			{{#array-footer-rows}}
+				{{#array-items}}
+				<li id="{{name}}">{{{html}}}</li>
+				{{/array-items}}
+			{{/array-footer-rows}}
+		</ul>
+	{{/data-footer}}
+	</div>
+</div>

@@ -1,0 +1,15 @@
+{
+    "styles": [
+        "variables.less"
+    ],
+    "features": [
+        "elements",
+        "content",
+        "interface",
+        "logo",
+        "legacy"
+    ],
+    "partials": [
+        "Portlet"
+    ]
+}
