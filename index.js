@@ -28,6 +28,7 @@ const CSS_ID = 'skinomatic.css';
 const RESET_ID = 'skinomatic.reset';
 const CONTENT_SOURCE_ID = 'skinomatic.content';
 const VIEW_SOURCE_ID = 'skinomatic.viewsource';
+const DESC_ID = 'skinomatic.currentskin.desc';
 
 const CLASS_MODE_FIND = 'mode--find--active';
 const CLASS_MODE_VIEWSOURCE = 'mode--build--active';
@@ -141,7 +142,7 @@ function preview() {
     const template = getmustache();
     let doc;
     const iframe = document.getElementById( 'skinomatic__preview__iframe' );
-
+    document.getElementById(DESC_ID).textContent = currentSkin.description;
     if (iframe.contentDocument) {
         doc = iframe.contentDocument;
     } else if(iframe.contentWindow) {
@@ -256,6 +257,7 @@ function loadLocalSkin() {
         setcssWithImgSubstitutions(localData[1]);
         document.getElementById(NAME_ID).value = getLocalName();
     }
+    currentSkin.description = 'A skin that you can create.';
     preview();
     return Promise.resolve();
 }
@@ -431,7 +433,8 @@ function loadSkin(name) {
                 ) ] );
             }),
         fetch(`${root}/skin.mustache`).then((r) => r.text()),
-        fetch(`${root}/skin.css`).then((r) => r.text())
+        fetch(`${root}/skin.css`).then((r) => r.text()),
+        fetch(`${root}/README.md`).then((r) => r.text())
     ] ).then((res) => {
         const assets = res[0];
         defaultImages = assets[0];
@@ -447,6 +450,7 @@ function loadSkin(name) {
         currentSkin.partials = partials;
         defaultTemplate = res[1];
         defaultCSS = res[2];
+        currentSkin.description = res[3];
         setmustache(defaultTemplate);
         setcssWithImgSubstitutions(defaultCSS);
         preview();
